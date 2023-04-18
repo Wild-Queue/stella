@@ -1,0 +1,2305 @@
+Start testing: Apr 18 13:07 MSK
+----------------------------------------------------------
+1/114 Testing: applying-non-function-1
+1/114 Test: applying-non-function-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/applying-non-function-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"applying-non-function-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: f
+Actual struct: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"applying-non-function-1" end time: Apr 18 13:07 MSK
+"applying-non-function-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/114 Testing: applying-non-function-2
+2/114 Test: applying-non-function-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/applying-non-function-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"applying-non-function-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: succ (n)
+Actual struct: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"applying-non-function-2" end time: Apr 18 13:07 MSK
+"applying-non-function-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/114 Testing: applying-non-function-3
+3/114 Test: applying-non-function-3
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/applying-non-function-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"applying-non-function-3" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: (fn (x : Bool)
+{
+  return fn (y : Nat)
+  {
+    return succ (y)
+  }
+}) (false) (0)
+Actual struct: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"applying-non-function-3" end time: Apr 18 13:07 MSK
+"applying-non-function-3" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/114 Testing: argument-type-mismatch-1
+4/114 Test: argument-type-mismatch-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/argument-type-mismatch-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"argument-type-mismatch-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: fn (x : Bool)
+{
+  return fn (y : Nat)
+  {
+    return succ (y)
+  }
+}
+Expected: TypeBool
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"argument-type-mismatch-1" end time: Apr 18 13:07 MSK
+"argument-type-mismatch-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/114 Testing: argument-type-mismatch-2
+5/114 Test: argument-type-mismatch-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/argument-type-mismatch-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"argument-type-mismatch-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: f
+Expected: (TypeFun [TypeBool] [TypeNat])
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"argument-type-mismatch-2" end time: Apr 18 13:07 MSK
+"argument-type-mismatch-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/114 Testing: argument-type-mismatch-3
+6/114 Test: argument-type-mismatch-3
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/argument-type-mismatch-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"argument-type-mismatch-3" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: k
+Expected: (TypeFun [TypeNat] [(TypeFun [(TypeFun [TypeNat] [TypeBool])] [TypeNat])])
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"argument-type-mismatch-3" end time: Apr 18 13:07 MSK
+"argument-type-mismatch-3" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/114 Testing: bad-if-1
+7/114 Test: bad-if-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/bad-if-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-if-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: wrong condition expression type: x
+Expected: TypeBool
+But got: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-if-1" end time: Apr 18 13:07 MSK
+"bad-if-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/114 Testing: bad-if-2
+8/114 Test: bad-if-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/bad-if-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-if-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the if statement: 
+"true" type is: TypeBool
+"0" type is: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-if-2" end time: Apr 18 13:07 MSK
+"bad-if-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/114 Testing: bad-succ-1
+9/114 Test: bad-succ-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/bad-succ-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-succ-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect type of succ argument: false
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-succ-1" end time: Apr 18 13:07 MSK
+"bad-succ-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/114 Testing: bad-succ-2
+10/114 Test: bad-succ-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/bad-succ-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-succ-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect type of succ argument: fn (x : Nat)
+{
+  return 0
+}
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-succ-2" end time: Apr 18 13:07 MSK
+"bad-succ-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/114 Testing: bad-succ-3
+11/114 Test: bad-succ-3
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/bad-succ-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-succ-3" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect type of succ argument: false
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-succ-3" end time: Apr 18 13:07 MSK
+"bad-succ-3" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/114 Testing: shadowed-variable-1
+12/114 Test: shadowed-variable-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/shadowed-variable-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"shadowed-variable-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: g
+Actual struct: TypeNat
+On the line: 13
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"shadowed-variable-1" end time: Apr 18 13:07 MSK
+"shadowed-variable-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/114 Testing: undefined-variable-1
+13/114 Test: undefined-variable-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/undefined-variable-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"undefined-variable-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: y is not defined
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"undefined-variable-1" end time: Apr 18 13:07 MSK
+"undefined-variable-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/114 Testing: undefined-variable-2
+14/114 Test: undefined-variable-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/undefined-variable-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"undefined-variable-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: m is not defined
+On the line: 13
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"undefined-variable-2" end time: Apr 18 13:07 MSK
+"undefined-variable-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/114 Testing: bad-squares-1
+15/114 Test: bad-squares-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/bad-squares-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-squares-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "Nat::add"
+Expected: TypeNat
+But got: (TypeFun [TypeNat] [TypeNat])
+On the line: 5
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-squares-1" end time: Apr 18 13:07 MSK
+"bad-squares-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/114 Testing: bad-squares-2
+16/114 Test: bad-squares-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/ill-typed/bad-squares-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-squares-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types in the third argument of the Nat::rec function: 
+Expected: fn(Nat) -> (fn(**T**) -> **T**)
+Name: fn (i : Nat)
+{
+  return fn (r : Nat)
+  {
+    return Nat::add (Nat::add (i) (succ (r)))
+  }
+}
+Type: (TypeFun [TypeNat] [(TypeFun [TypeNat] [(TypeFun [TypeNat] [TypeNat])])])
+On the line: 16
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-squares-2" end time: Apr 18 13:07 MSK
+"bad-squares-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/114 Testing: bad-pairs-1
+17/114 Test: bad-pairs-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/pairs/ill-typed/bad-pairs-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-pairs-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: swap
+Expected: (TypeTuple [TypeNat, TypeBool] )
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-pairs-1" end time: Apr 18 13:07 MSK
+"bad-pairs-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/114 Testing: bad-sum-types-1
+18/114 Test: bad-sum-types-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/sum-types/ill-typed/bad-sum-types-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-sum-types-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: wrong condition expression type: b
+Expected: TypeBool
+But got: (TypeFun [TypeNat] [TypeNat])
+On the line: 8
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-sum-types-1" end time: Apr 18 13:07 MSK
+"bad-sum-types-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/114 Testing: bad-tuples-1
+19/114 Test: bad-tuples-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/tuples/ill-typed/bad-tuples-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-tuples-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: rotate3
+Expected: (TypeTuple [TypeNat, TypeNat, TypeNat] )
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-tuples-1" end time: Apr 18 13:07 MSK
+"bad-tuples-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/114 Testing: bad-nat-1
+20/114 Test: bad-nat-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-nat-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-nat-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the third arg and the second one: 
+Expected: Nat::rec(Nat, T, fn(Nat) -> (fn(T) -> T))
+Second parameter name: false
+Second parameter type: TypeBool
+Third parameter name: fn (i : Nat)
+{
+  return fn (r : Nat)
+  {
+    return succ (r)
+  }
+}
+Third parameter **T** type: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-nat-1" end time: Apr 18 13:07 MSK
+"bad-nat-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/114 Testing: applying-non-function-1_extended_tests
+21/114 Test: applying-non-function-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/applying-non-function-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"applying-non-function-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: f
+Actual struct: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"applying-non-function-1_extended_tests" end time: Apr 18 13:07 MSK
+"applying-non-function-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/114 Testing: argument-type-mismatch-2_extended_tests
+22/114 Test: argument-type-mismatch-2_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/argument-type-mismatch-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"argument-type-mismatch-2_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: f
+Expected: (TypeFun [TypeBool] [TypeNat])
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"argument-type-mismatch-2_extended_tests" end time: Apr 18 13:07 MSK
+"argument-type-mismatch-2_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/114 Testing: bad-succ-3_extended_tests
+23/114 Test: bad-succ-3_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-succ-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-succ-3_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect type of succ argument: false
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-succ-3_extended_tests" end time: Apr 18 13:07 MSK
+"bad-succ-3_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/114 Testing: bad-logic-not-1
+24/114 Test: bad-logic-not-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-logic-not-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-logic-not-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: n is not defined
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-logic-not-1" end time: Apr 18 13:07 MSK
+"bad-logic-not-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/114 Testing: bad-abstraction
+25/114 Test: bad-abstraction
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-abstraction.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-abstraction" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "main"
+Expected: TypeNat
+But got: (TypeFun [TypeNat] [TypeNat])
+On the line: 10
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-abstraction" end time: Apr 18 13:07 MSK
+"bad-abstraction" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/114 Testing: bad-factorial-2
+26/114 Test: bad-factorial-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-factorial-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-factorial-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: Nat2Nat::const
+Expected: (TypeFun [TypeNat] [TypeNat])
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-factorial-2" end time: Apr 18 13:07 MSK
+"bad-factorial-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/114 Testing: nat__rec-parameters
+27/114 Test: nat__rec-parameters
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/nat__rec-parameters.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"nat__rec-parameters" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: wrong type of the first argument for Nar::rec 
+Name: true
+Type: TypeBool
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"nat__rec-parameters" end time: Apr 18 13:07 MSK
+"nat__rec-parameters" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/114 Testing: bad-succ-1_extended_tests
+28/114 Test: bad-succ-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-succ-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-succ-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect type of succ argument: false
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-succ-1_extended_tests" end time: Apr 18 13:07 MSK
+"bad-succ-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/114 Testing: bad-cmp-2
+29/114 Test: bad-cmp-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-cmp-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-cmp-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types in the if condition: 
+n
+m
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-cmp-2" end time: Apr 18 13:07 MSK
+"bad-cmp-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/114 Testing: applying-non-function-3_extended_tests
+30/114 Test: applying-non-function-3_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/applying-non-function-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"applying-non-function-3_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: (fn (x : Bool)
+{
+  return fn (y : Nat)
+  {
+    return succ (y)
+  }
+}) (false) (0)
+Actual struct: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"applying-non-function-3_extended_tests" end time: Apr 18 13:07 MSK
+"applying-non-function-3_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/114 Testing: bad-if-1_extended_tests
+31/114 Test: bad-if-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-if-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-if-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: wrong condition expression type: x
+Expected: TypeBool
+But got: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-if-1_extended_tests" end time: Apr 18 13:07 MSK
+"bad-if-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/114 Testing: bad-add-1
+32/114 Test: bad-add-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-add-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-add-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "add_fn"
+Expected: TypeNat
+But got: TypeBool
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-add-1" end time: Apr 18 13:07 MSK
+"bad-add-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/114 Testing: my-mismatch
+33/114 Test: my-mismatch
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/my-mismatch.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-mismatch" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "main"
+Expected: (TypeFun [TypeNat] [TypeNat])
+But got: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-mismatch" end time: Apr 18 13:07 MSK
+"my-mismatch" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/114 Testing: bad-nat-rec-1
+34/114 Test: bad-nat-rec-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-nat-rec-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-nat-rec-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: wrong type of the third argument for Nar::rec 
+Expected: fn(Nat) -> **(fn(T) -> T)**
+Name: fn (r : Nat)
+{
+  return succ (r)
+}
+Type: (TypeFun [TypeNat] [TypeNat])
+On the line: 6
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-nat-rec-1" end time: Apr 18 13:07 MSK
+"bad-nat-rec-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/114 Testing: undefined-variable-3
+35/114 Test: undefined-variable-3
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/undefined-variable-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"undefined-variable-3" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: r is not defined
+On the line: 12
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"undefined-variable-3" end time: Apr 18 13:07 MSK
+"undefined-variable-3" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/114 Testing: argument-type-mismatch-4
+36/114 Test: argument-type-mismatch-4
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/argument-type-mismatch-4.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"argument-type-mismatch-4" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: invalid constant integer. In the Stella languagne only 0 is valid constInt
+On the line: 13
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"argument-type-mismatch-4" end time: Apr 18 13:07 MSK
+"argument-type-mismatch-4" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/114 Testing: bad-cmp-6
+37/114 Test: bad-cmp-6
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-cmp-6.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-cmp-6" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types in the if condition: 
+n
+m
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-cmp-6" end time: Apr 18 13:07 MSK
+"bad-cmp-6" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/114 Testing: bad-iszero
+38/114 Test: bad-iszero
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-iszero.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-iszero" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect type of succ argument: Nat::iszero (x)
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-iszero" end time: Apr 18 13:07 MSK
+"bad-iszero" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/114 Testing: shadowed-variable-2
+39/114 Test: shadowed-variable-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/shadowed-variable-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"shadowed-variable-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: f
+Actual struct: TypeNat
+On the line: 18
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"shadowed-variable-2" end time: Apr 18 13:07 MSK
+"shadowed-variable-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/114 Testing: bad-function-call
+40/114 Test: bad-function-call
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-function-call.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-function-call" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "Nat::add"
+Expected: TypeNat
+But got: (TypeFun [TypeNat] [TypeNat])
+On the line: 5
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-function-call" end time: Apr 18 13:07 MSK
+"bad-function-call" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/114 Testing: bad-cmp-4
+41/114 Test: bad-cmp-4
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-cmp-4.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-cmp-4" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types in the if condition: 
+n
+m
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-cmp-4" end time: Apr 18 13:07 MSK
+"bad-cmp-4" time elapsed: 00:00:00
+----------------------------------------------------------
+
+42/114 Testing: added-test-1
+42/114 Test: added-test-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/added-test-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"added-test-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "function_chooser"
+Expected: (TypeFun [TypeNat] [TypeNat])
+But got: (TypeFun [(TypeFun [TypeNat] [TypeNat])] [(TypeFun [(TypeFun [TypeNat] [TypeNat])] [(TypeFun [TypeNat] [TypeNat])])])
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"added-test-1" end time: Apr 18 13:07 MSK
+"added-test-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+43/114 Testing: my-ill-test-2
+43/114 Test: my-ill-test-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/my-ill-test-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-ill-test-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "main"
+Expected: (TypeFun [TypeBool] [TypeBool])
+But got: TypeBool
+On the line: 17
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-ill-test-2" end time: Apr 18 13:07 MSK
+"my-ill-test-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+44/114 Testing: undefined-variable-1_extended_tests
+44/114 Test: undefined-variable-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/undefined-variable-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"undefined-variable-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: wrong condition expression type: x
+Expected: TypeBool
+But got: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"undefined-variable-1_extended_tests" end time: Apr 18 13:07 MSK
+"undefined-variable-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+45/114 Testing: bad-multiply-1
+45/114 Test: bad-multiply-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-multiply-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-multiply-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "multiply_fn"
+Expected: TypeNat
+But got: TypeBool
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-multiply-1" end time: Apr 18 13:07 MSK
+"bad-multiply-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+46/114 Testing: invalid-not_
+46/114 Test: invalid-not_
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/invalid-not_.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"invalid-not_" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the third arg and the second one: 
+Expected: Nat::rec(Nat, T, fn(Nat) -> (fn(T) -> T))
+Second parameter name: false
+Second parameter type: TypeBool
+Third parameter name: fn (i : Nat)
+{
+  return fn (r : fn (Nat) -> Nat)
+  {
+    return fn (x : Nat)
+    {
+      return 0
+    }
+  }
+}
+Third parameter **T** type: (TypeFun [TypeNat] [TypeNat])
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"invalid-not_" end time: Apr 18 13:07 MSK
+"invalid-not_" time elapsed: 00:00:00
+----------------------------------------------------------
+
+47/114 Testing: my-ill-typed-2
+47/114 Test: my-ill-typed-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/my-ill-typed-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-ill-typed-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the if statement: 
+"succ (0)" type is: TypeNat
+"fn (k : Bool)
+{
+  return if k then succ (f) else succ (succ (f))
+}" type is: (TypeFun [TypeBool] [TypeNat])
+On the line: 7
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-ill-typed-2" end time: Apr 18 13:07 MSK
+"my-ill-typed-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+48/114 Testing: bad-if-and-undefined-variable-1
+48/114 Test: bad-if-and-undefined-variable-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-if-and-undefined-variable-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-if-and-undefined-variable-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: y is not defined
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-if-and-undefined-variable-1" end time: Apr 18 13:07 MSK
+"bad-if-and-undefined-variable-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+49/114 Testing: bad-if-3
+49/114 Test: bad-if-3
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-if-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-if-3" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the if statement: 
+"0" type is: TypeNat
+"fn (x : Nat)
+{
+  return 0
+}" type is: (TypeFun [TypeNat] [TypeNat])
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-if-3" end time: Apr 18 13:07 MSK
+"bad-if-3" time elapsed: 00:00:00
+----------------------------------------------------------
+
+50/114 Testing: bad-squares-1_extended_tests
+50/114 Test: bad-squares-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-squares-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-squares-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "Nat::add"
+Expected: TypeNat
+But got: (TypeFun [TypeNat] [TypeNat])
+On the line: 5
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-squares-1_extended_tests" end time: Apr 18 13:07 MSK
+"bad-squares-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+51/114 Testing: bad-succ-2_extended_tests
+51/114 Test: bad-succ-2_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-succ-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-succ-2_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect type of succ argument: fn (x : Nat)
+{
+  return 0
+}
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-succ-2_extended_tests" end time: Apr 18 13:07 MSK
+"bad-succ-2_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+52/114 Testing: bad-factorial-1
+52/114 Test: bad-factorial-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-factorial-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-factorial-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "Nat2Nat::const"
+Expected: (TypeFun [TypeNat] [(TypeFun [TypeNat] [TypeNat])])
+But got: (TypeFun [TypeNat] [TypeNat])
+On the line: 5
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-factorial-1" end time: Apr 18 13:07 MSK
+"bad-factorial-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+53/114 Testing: bad-cmp-1
+53/114 Test: bad-cmp-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-cmp-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-cmp-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types in the if condition: 
+n
+m
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-cmp-1" end time: Apr 18 13:07 MSK
+"bad-cmp-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+54/114 Testing: argument-type-mismatch-3_extended_tests
+54/114 Test: argument-type-mismatch-3_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/argument-type-mismatch-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"argument-type-mismatch-3_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: k
+Expected: (TypeFun [TypeNat] [(TypeFun [(TypeFun [TypeNat] [TypeBool])] [TypeNat])])
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"argument-type-mismatch-3_extended_tests" end time: Apr 18 13:07 MSK
+"argument-type-mismatch-3_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+55/114 Testing: my-factorial
+55/114 Test: my-factorial
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/my-factorial.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-factorial" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: factorial (n)
+Actual struct: TypeNat
+On the line: 32
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-factorial" end time: Apr 18 13:07 MSK
+"my-factorial" time elapsed: 00:00:00
+----------------------------------------------------------
+
+56/114 Testing: bad-factorial
+56/114 Test: bad-factorial
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-factorial.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-factorial" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "Nat2Nat::const"
+Expected: (TypeFun [TypeNat] [(TypeFun [TypeNat] [TypeBool])])
+But got: (TypeFun [TypeNat] [(TypeFun [TypeNat] [TypeNat])])
+On the line: 5
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-factorial" end time: Apr 18 13:07 MSK
+"bad-factorial" time elapsed: 00:00:00
+----------------------------------------------------------
+
+57/114 Testing: applying-non-function-2_extended_tests
+57/114 Test: applying-non-function-2_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/applying-non-function-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"applying-non-function-2_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: succ (n)
+Actual struct: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"applying-non-function-2_extended_tests" end time: Apr 18 13:07 MSK
+"applying-non-function-2_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+58/114 Testing: argument-type-mismatch-1_extended_tests
+58/114 Test: argument-type-mismatch-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/argument-type-mismatch-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"argument-type-mismatch-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: fn (x : Bool)
+{
+  return fn (y : Nat)
+  {
+    return succ (y)
+  }
+}
+Expected: TypeBool
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"argument-type-mismatch-1_extended_tests" end time: Apr 18 13:07 MSK
+"argument-type-mismatch-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+59/114 Testing: bad-cmp-3
+59/114 Test: bad-cmp-3
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-cmp-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-cmp-3" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types in the if condition: 
+n
+m
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-cmp-3" end time: Apr 18 13:07 MSK
+"bad-cmp-3" time elapsed: 00:00:00
+----------------------------------------------------------
+
+60/114 Testing: bad-nat-2
+60/114 Test: bad-nat-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-nat-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-nat-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: wrong type of the first argument for Nar::rec 
+Name: false
+Type: TypeBool
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-nat-2" end time: Apr 18 13:07 MSK
+"bad-nat-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+61/114 Testing: invalid-nat
+61/114 Test: invalid-nat
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/invalid-nat.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"invalid-nat" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the third arg and the second one: 
+Expected: Nat::rec(Nat, T, fn(Nat) -> (fn(T) -> T))
+Second parameter name: false
+Second parameter type: TypeBool
+Third parameter name: fn (i : Nat)
+{
+  return fn (r : fn (Nat) -> Nat)
+  {
+    return fn (x : Nat)
+    {
+      return 0
+    }
+  }
+}
+Third parameter **T** type: (TypeFun [TypeNat] [TypeNat])
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"invalid-nat" end time: Apr 18 13:07 MSK
+"invalid-nat" time elapsed: 00:00:00
+----------------------------------------------------------
+
+62/114 Testing: function-mismatch
+62/114 Test: function-mismatch
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/function-mismatch.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"function-mismatch" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "main"
+Expected: TypeBool
+But got: TypeNat
+On the line: 9
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"function-mismatch" end time: Apr 18 13:07 MSK
+"function-mismatch" time elapsed: 00:00:00
+----------------------------------------------------------
+
+63/114 Testing: bad-if-4
+63/114 Test: bad-if-4
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-if-4.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-if-4" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the if statement: 
+"fn (x : Bool)
+{
+  return 0
+}" type is: (TypeFun [TypeBool] [TypeNat])
+"fn (x : Bool)
+{
+  return true
+}" type is: (TypeFun [TypeBool] [TypeBool])
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-if-4" end time: Apr 18 13:07 MSK
+"bad-if-4" time elapsed: 00:00:00
+----------------------------------------------------------
+
+64/114 Testing: bad-higher-order-1
+64/114 Test: bad-higher-order-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-higher-order-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-higher-order-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "f"
+Expected: (TypeFun [TypeNat] [TypeBool])
+But got: (TypeFun [TypeNat] [TypeNat])
+On the line: 12
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-higher-order-1" end time: Apr 18 13:07 MSK
+"bad-higher-order-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+65/114 Testing: my-ill-typed-1
+65/114 Test: my-ill-typed-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/my-ill-typed-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-ill-typed-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the if statement: 
+"fn (p : Bool)
+{
+  return succ (0)
+}" type is: (TypeFun [TypeBool] [TypeNat])
+"fn (p : Bool)
+{
+  return true
+}" type is: (TypeFun [TypeBool] [TypeBool])
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-ill-typed-1" end time: Apr 18 13:07 MSK
+"my-ill-typed-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+66/114 Testing: undefined-variable-2_extended_tests
+66/114 Test: undefined-variable-2_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/undefined-variable-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"undefined-variable-2_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: m is not defined
+On the line: 13
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"undefined-variable-2_extended_tests" end time: Apr 18 13:07 MSK
+"undefined-variable-2_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+67/114 Testing: added-test-2
+67/114 Test: added-test-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/added-test-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"added-test-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: first
+Expected: TypeNat
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"added-test-2" end time: Apr 18 13:07 MSK
+"added-test-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+68/114 Testing: bad-squares-2_extended_tests
+68/114 Test: bad-squares-2_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-squares-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-squares-2_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types in the third argument of the Nat::rec function: 
+Expected: fn(Nat) -> (fn(**T**) -> **T**)
+Name: fn (i : Nat)
+{
+  return fn (r : Nat)
+  {
+    return Nat::add (Nat::add (i) (succ (r)))
+  }
+}
+Type: (TypeFun [TypeNat] [(TypeFun [TypeNat] [(TypeFun [TypeNat] [TypeNat])])])
+On the line: 16
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-squares-2_extended_tests" end time: Apr 18 13:07 MSK
+"bad-squares-2_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+69/114 Testing: bad-nat-rec-2
+69/114 Test: bad-nat-rec-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-nat-rec-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-nat-rec-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: wrong type of the third argument for Nar::rec 
+Expected: fn(Nat) -> **(fn(T) -> T)**
+Name: Nat::applyToZero (fn (i : Nat)
+{
+  return fn (r : Nat)
+  {
+    return succ (r)
+  }
+})
+Type: (TypeFun [TypeNat] [TypeNat])
+On the line: 12
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-nat-rec-2" end time: Apr 18 13:07 MSK
+"bad-nat-rec-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+70/114 Testing: bad-logic-or-1
+70/114 Test: bad-logic-or-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-logic-or-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-logic-or-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "or_fn"
+Expected: TypeBool
+But got: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-logic-or-1" end time: Apr 18 13:07 MSK
+"bad-logic-or-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+71/114 Testing: bad-return-type
+71/114 Test: bad-return-type
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-return-type.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-return-type" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "badReturn"
+Expected: (TypeFun [TypeNat] [TypeNat])
+But got: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-return-type" end time: Apr 18 13:07 MSK
+"bad-return-type" time elapsed: 00:00:00
+----------------------------------------------------------
+
+72/114 Testing: application-param-type
+72/114 Test: application-param-type
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/application-param-type.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"application-param-type" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect parameters in the function call
+Function name: applTypeCheck (n)
+Expected: TypeNat
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"application-param-type" end time: Apr 18 13:07 MSK
+"application-param-type" time elapsed: 00:00:00
+----------------------------------------------------------
+
+73/114 Testing: bad-if-2_extended_tests
+73/114 Test: bad-if-2_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-if-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-if-2_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types of statements in the if statement: 
+"true" type is: TypeBool
+"0" type is: TypeNat
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-if-2_extended_tests" end time: Apr 18 13:07 MSK
+"bad-if-2_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+74/114 Testing: shadowed-variable-1_extended_tests
+74/114 Test: shadowed-variable-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/shadowed-variable-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"shadowed-variable-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: trying to use non-function in the function call:
+Name: g
+Actual struct: TypeNat
+On the line: 13
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"shadowed-variable-1_extended_tests" end time: Apr 18 13:07 MSK
+"shadowed-variable-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+75/114 Testing: bad-cmp-5
+75/114 Test: bad-cmp-5
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-cmp-5.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-cmp-5" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: different types in the if condition: 
+n
+m
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-cmp-5" end time: Apr 18 13:07 MSK
+"bad-cmp-5" time elapsed: 00:00:00
+----------------------------------------------------------
+
+76/114 Testing: bad-logic-and-1
+76/114 Test: bad-logic-and-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/ill-typed/bad-logic-and-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bad-logic-and-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+Error: incorrect return expression type in function "and_fn"
+Expected: TypeNat
+But got: TypeBool
+On the line: 4
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bad-logic-and-1" end time: Apr 18 13:07 MSK
+"bad-logic-and-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+77/114 Testing: factorial
+77/114 Test: factorial
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/well-typed/factorial.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"factorial" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"factorial" end time: Apr 18 13:07 MSK
+"factorial" time elapsed: 00:00:00
+----------------------------------------------------------
+
+78/114 Testing: increment_twice
+78/114 Test: increment_twice
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/well-typed/increment_twice.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"increment_twice" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"increment_twice" end time: Apr 18 13:07 MSK
+"increment_twice" time elapsed: 00:00:00
+----------------------------------------------------------
+
+79/114 Testing: higher-order-1
+79/114 Test: higher-order-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/well-typed/higher-order-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"higher-order-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"higher-order-1" end time: Apr 18 13:07 MSK
+"higher-order-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+80/114 Testing: logical-operators
+80/114 Test: logical-operators
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/well-typed/logical-operators.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"logical-operators" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"logical-operators" end time: Apr 18 13:07 MSK
+"logical-operators" time elapsed: 00:00:00
+----------------------------------------------------------
+
+81/114 Testing: squares
+81/114 Test: squares
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/core/well-typed/squares.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"squares" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"squares" end time: Apr 18 13:07 MSK
+"squares" time elapsed: 00:00:00
+----------------------------------------------------------
+
+82/114 Testing: pairs-1
+82/114 Test: pairs-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/pairs/well-typed/pairs-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"pairs-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"pairs-1" end time: Apr 18 13:07 MSK
+"pairs-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+83/114 Testing: sum-types-1
+83/114 Test: sum-types-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/sum-types/well-typed/sum-types-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"sum-types-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"sum-types-1" end time: Apr 18 13:07 MSK
+"sum-types-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+84/114 Testing: sum-types-2
+84/114 Test: sum-types-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/sum-types/well-typed/sum-types-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"sum-types-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"sum-types-2" end time: Apr 18 13:07 MSK
+"sum-types-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+85/114 Testing: tuples-1
+85/114 Test: tuples-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/tuples/well-typed/tuples-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"tuples-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"tuples-1" end time: Apr 18 13:07 MSK
+"tuples-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+86/114 Testing: my-well-typed-2
+86/114 Test: my-well-typed-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/my-well-typed-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-well-typed-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-well-typed-2" end time: Apr 18 13:07 MSK
+"my-well-typed-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+87/114 Testing: inner-if
+87/114 Test: inner-if
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/inner-if.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"inner-if" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"inner-if" end time: Apr 18 13:07 MSK
+"inner-if" time elapsed: 00:00:00
+----------------------------------------------------------
+
+88/114 Testing: abstract-function
+88/114 Test: abstract-function
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/abstract-function.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"abstract-function" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"abstract-function" end time: Apr 18 13:07 MSK
+"abstract-function" time elapsed: 00:00:00
+----------------------------------------------------------
+
+89/114 Testing: negate
+89/114 Test: negate
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/negate.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"negate" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"negate" end time: Apr 18 13:07 MSK
+"negate" time elapsed: 00:00:00
+----------------------------------------------------------
+
+90/114 Testing: higher-order-2
+90/114 Test: higher-order-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/higher-order-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"higher-order-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"higher-order-2" end time: Apr 18 13:07 MSK
+"higher-order-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+91/114 Testing: good-if-2
+91/114 Test: good-if-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/good-if-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"good-if-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"good-if-2" end time: Apr 18 13:07 MSK
+"good-if-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+92/114 Testing: shadowed-variable-2_extended_tests
+92/114 Test: shadowed-variable-2_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/shadowed-variable-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"shadowed-variable-2_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"shadowed-variable-2_extended_tests" end time: Apr 18 13:07 MSK
+"shadowed-variable-2_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+93/114 Testing: good-if
+93/114 Test: good-if
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/good-if.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"good-if" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"good-if" end time: Apr 18 13:07 MSK
+"good-if" time elapsed: 00:00:00
+----------------------------------------------------------
+
+94/114 Testing: added-test-1_extended_tests
+94/114 Test: added-test-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/added-test-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"added-test-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"added-test-1_extended_tests" end time: Apr 18 13:07 MSK
+"added-test-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+95/114 Testing: good-succ-2
+95/114 Test: good-succ-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/good-succ-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"good-succ-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"good-succ-2" end time: Apr 18 13:07 MSK
+"good-succ-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+96/114 Testing: decrement_twice
+96/114 Test: decrement_twice
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/decrement_twice.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"decrement_twice" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"decrement_twice" end time: Apr 18 13:07 MSK
+"decrement_twice" time elapsed: 00:00:00
+----------------------------------------------------------
+
+97/114 Testing: nested
+97/114 Test: nested
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/nested.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"nested" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"nested" end time: Apr 18 13:07 MSK
+"nested" time elapsed: 00:00:00
+----------------------------------------------------------
+
+98/114 Testing: applying-actual-function-3
+98/114 Test: applying-actual-function-3
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/applying-actual-function-3.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"applying-actual-function-3" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"applying-actual-function-3" end time: Apr 18 13:07 MSK
+"applying-actual-function-3" time elapsed: 00:00:00
+----------------------------------------------------------
+
+99/114 Testing: increment_twice_extended_tests
+99/114 Test: increment_twice_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/increment_twice.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"increment_twice_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"increment_twice_extended_tests" end time: Apr 18 13:07 MSK
+"increment_twice_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+100/114 Testing: increment-triple
+100/114 Test: increment-triple
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/increment-triple.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"increment-triple" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"increment-triple" end time: Apr 18 13:07 MSK
+"increment-triple" time elapsed: 00:00:00
+----------------------------------------------------------
+
+101/114 Testing: my-good-succ
+101/114 Test: my-good-succ
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/my-good-succ.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-good-succ" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-good-succ" end time: Apr 18 13:07 MSK
+"my-good-succ" time elapsed: 00:00:00
+----------------------------------------------------------
+
+102/114 Testing: apply-increase
+102/114 Test: apply-increase
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/apply-increase.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"apply-increase" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"apply-increase" end time: Apr 18 13:07 MSK
+"apply-increase" time elapsed: 00:00:00
+----------------------------------------------------------
+
+103/114 Testing: many-if
+103/114 Test: many-if
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/many-if.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"many-if" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"many-if" end time: Apr 18 13:07 MSK
+"many-if" time elapsed: 00:00:00
+----------------------------------------------------------
+
+104/114 Testing: my-good-if
+104/114 Test: my-good-if
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/my-good-if.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-good-if" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-good-if" end time: Apr 18 13:07 MSK
+"my-good-if" time elapsed: 00:00:00
+----------------------------------------------------------
+
+105/114 Testing: cubes
+105/114 Test: cubes
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/cubes.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"cubes" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"cubes" end time: Apr 18 13:07 MSK
+"cubes" time elapsed: 00:00:00
+----------------------------------------------------------
+
+106/114 Testing: my-well-typed-1
+106/114 Test: my-well-typed-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/my-well-typed-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-well-typed-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-well-typed-1" end time: Apr 18 13:07 MSK
+"my-well-typed-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+107/114 Testing: squares_extended_tests
+107/114 Test: squares_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/squares.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"squares_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"squares_extended_tests" end time: Apr 18 13:07 MSK
+"squares_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+108/114 Testing: my-test-2
+108/114 Test: my-test-2
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/my-test-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"my-test-2" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"my-test-2" end time: Apr 18 13:07 MSK
+"my-test-2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+109/114 Testing: nat-to-bool
+109/114 Test: nat-to-bool
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/nat-to-bool.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"nat-to-bool" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"nat-to-bool" end time: Apr 18 13:07 MSK
+"nat-to-bool" time elapsed: 00:00:00
+----------------------------------------------------------
+
+110/114 Testing: double-application
+110/114 Test: double-application
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/double-application.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"double-application" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"double-application" end time: Apr 18 13:07 MSK
+"double-application" time elapsed: 00:00:00
+----------------------------------------------------------
+
+111/114 Testing: added-test-2_extended_tests
+111/114 Test: added-test-2_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/added-test-2.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"added-test-2_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"added-test-2_extended_tests" end time: Apr 18 13:07 MSK
+"added-test-2_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+112/114 Testing: bool-to-nat
+112/114 Test: bool-to-nat
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/bool-to-nat.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"bool-to-nat" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"bool-to-nat" end time: Apr 18 13:07 MSK
+"bool-to-nat" time elapsed: 00:00:00
+----------------------------------------------------------
+
+113/114 Testing: good-succ-1
+113/114 Test: good-succ-1
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/good-succ-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"good-succ-1" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"good-succ-1" end time: Apr 18 13:07 MSK
+"good-succ-1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+114/114 Testing: higher-order-1_extended_tests
+114/114 Test: higher-order-1_extended_tests
+Command: "/home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build/stella-interpreter" "typecheck" "../tests/extended_tests/well-typed/higher-order-1.stella"
+Directory: /home/egor/InnoSubjects/S23/ACCPA/Assignments/Latest/build
+"higher-order-1_extended_tests" start time: Apr 18 13:07 MSK
+Output:
+----------------------------------------------------------
+parsing succeeded!
+prog is not null
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"higher-order-1_extended_tests" end time: Apr 18 13:07 MSK
+"higher-order-1_extended_tests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Apr 18 13:07 MSK
