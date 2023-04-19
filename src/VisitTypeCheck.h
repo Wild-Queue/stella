@@ -5,12 +5,104 @@
 /* You might want to change the above name. */
 
 #include "Stella/Absyn.H"
+#include "Stella/Printer.H"
+#include <iostream>
+#include <unordered_map>
+#include <string>
+#include <vector>
+#include <stack>
 
 namespace Stella
 {
-  class VisitTypeCheck : public Visitor
+  class VariableDescriptions
   {
   public:
+    std::string name = "";
+    bool overshadows;
+    Type *type = nullptr;
+
+    VariableDescriptions() : name(""), type(nullptr) { this->overshadows = -1; };
+
+    VariableDescriptions(std::string name, Type *type, int overshadows) : name(name), type(type), overshadows(overshadows){};
+
+    void operator=(VariableDescriptions *C)
+    {
+      this->type = C->type;
+      this->name = C->name;
+      this->overshadows = C->overshadows;
+    };
+  };
+
+  class VisitTypeCheck : public Visitor
+  {
+  private:
+    std::unordered_map<std::string, VariableDescriptions> declearedVariables;
+    std::vector<Type *> returnTypesList;
+    Type *lastReturn = nullptr;
+    Type *inType = nullptr;
+    PrintAbsyn *printer = new PrintAbsyn();
+    ShowAbsyn *showner = new ShowAbsyn();
+
+    void addVariableDecl(std::string name_, Type *type, int overshadows)
+    {
+      // std::cout<< "Declaration: " << name_ << " : " << this->showner->show(type) << std::endl;
+      if (overshadows == 0 && this->declearedVariables.count(name_) != 0)
+      {
+        std::cout << "Error: variable or function with such name already exist" << std::endl;
+        std::cout << "Name: " << name_ << std::endl;
+        exit(1);
+      }
+      PrintAbsyn *printer = new PrintAbsyn();
+      auto varDecl = new VariableDescriptions(name_, type, overshadows);
+      // std::cout << varDecl->name << " |<=>| " << printer->print(varDecl->type) << std::endl;
+
+      this->declearedVariables[name_] = varDecl;
+    };
+
+    Type *getLastReturn()
+    {
+      Type *lastReturnCopy = this->lastReturn;
+      this->lastReturn = nullptr;
+
+      return lastReturnCopy;
+    };
+
+    void setLastReturn(Type *lastReturn_)
+    {
+      this->lastReturn = lastReturn_;
+    };
+
+    std::vector<Type *> getReturnTypesList()
+    {
+      std::vector<Type *> returnTypesListCopy = this->returnTypesList;
+      this->returnTypesList.clear();
+
+      return returnTypesListCopy;
+    };
+
+    void setReturnTypesList(std::vector<Type *> returnTypesList_)
+    {
+      this->returnTypesList = returnTypesList_;
+    };
+
+    Type *getInType()
+    {
+      return this->inType;
+    };
+
+    void removeInType()
+    {
+      this->inType = nullptr;
+    };
+
+    void setInType(Type *inType_)
+    {
+      this->inType = inType_;
+    };
+
+  public:
+    void printDeclVars();
+    void ifDefined(std::string ID, int line_number);
     void visitProgram(Program *p);
     void visitLanguageDecl(LanguageDecl *p);
     void visitExtension(Extension *p);
