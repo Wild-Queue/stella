@@ -268,6 +268,35 @@ void PrintAbsyn::visitDeclTypeAlias(DeclTypeAlias *p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitDeclExceptionType(DeclExceptionType *p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(STELLA__L_PAREN);
+
+  render("exception");
+  render("type");
+  render('=');
+  _i_ = 0; p->type_->accept(this);
+
+  if (oldi > 0) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitDeclExceptionVariant(DeclExceptionVariant *p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(STELLA__L_PAREN);
+
+  render("exception");
+  render("variant");
+  visitStellaIdent(p->stellaident_);
+  render(':');
+  _i_ = 0; p->type_->accept(this);
+
+  if (oldi > 0) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitListDecl(ListDecl *listdecl)
 {
   iterListDecl(listdecl->begin(), listdecl->end());
@@ -539,6 +568,40 @@ void PrintAbsyn::visitTypeUnit(TypeUnit *p)
   if (oldi > 3) render(STELLA__L_PAREN);
 
   render("Unit");
+
+  if (oldi > 3) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitTypeTop(TypeTop *p)
+{
+  int oldi = _i_;
+  if (oldi > 3) render(STELLA__L_PAREN);
+
+  render("Top");
+
+  if (oldi > 3) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitTypeBottom(TypeBottom *p)
+{
+  int oldi = _i_;
+  if (oldi > 3) render(STELLA__L_PAREN);
+
+  render("Bot");
+
+  if (oldi > 3) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitTypeRef(TypeRef *p)
+{
+  int oldi = _i_;
+  if (oldi > 3) render(STELLA__L_PAREN);
+
+  render('&');
+  _i_ = 2; p->type_->accept(this);
 
   if (oldi > 3) render(STELLA__R_PAREN);
   _i_ = oldi;
@@ -956,6 +1019,47 @@ void PrintAbsyn::visitSequence(Sequence *p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitLet(Let *p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(STELLA__L_PAREN);
+
+  render("let");
+  _i_ = 0; visitListPatternBinding(p->listpatternbinding_);
+  render("in");
+  _i_ = 0; p->expr_->accept(this);
+
+  if (oldi > 0) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitLetRec(LetRec *p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(STELLA__L_PAREN);
+
+  render("letrec");
+  _i_ = 0; visitListPatternBinding(p->listpatternbinding_);
+  render("in");
+  _i_ = 0; p->expr_->accept(this);
+
+  if (oldi > 0) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitAssign(Assign *p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(STELLA__L_PAREN);
+
+  _i_ = 2; p->expr_1->accept(this);
+  render(":=");
+  _i_ = 1; p->expr_2->accept(this);
+
+  if (oldi > 1) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitIf(If *p)
 {
   int oldi = _i_;
@@ -967,34 +1071,6 @@ void PrintAbsyn::visitIf(If *p)
   _i_ = 1; p->expr_2->accept(this);
   render("else");
   _i_ = 1; p->expr_3->accept(this);
-
-  if (oldi > 1) render(STELLA__R_PAREN);
-  _i_ = oldi;
-}
-
-void PrintAbsyn::visitLet(Let *p)
-{
-  int oldi = _i_;
-  if (oldi > 1) render(STELLA__L_PAREN);
-
-  render("let");
-  _i_ = 0; visitListPatternBinding(p->listpatternbinding_);
-  render("in");
-  _i_ = 1; p->expr_->accept(this);
-
-  if (oldi > 1) render(STELLA__R_PAREN);
-  _i_ = oldi;
-}
-
-void PrintAbsyn::visitLetRec(LetRec *p)
-{
-  int oldi = _i_;
-  if (oldi > 1) render(STELLA__L_PAREN);
-
-  render("letrec");
-  _i_ = 0; visitListPatternBinding(p->listpatternbinding_);
-  render("in");
-  _i_ = 1; p->expr_->accept(this);
 
   if (oldi > 1) render(STELLA__R_PAREN);
   _i_ = oldi;
@@ -1084,6 +1160,20 @@ void PrintAbsyn::visitTypeAsc(TypeAsc *p)
   if (oldi > 3) render(STELLA__L_PAREN);
 
   _i_ = 3; p->expr_->accept(this);
+  render("as");
+  _i_ = 2; p->type_->accept(this);
+
+  if (oldi > 3) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitTypeCast(TypeCast *p)
+{
+  int oldi = _i_;
+  if (oldi > 3) render(STELLA__L_PAREN);
+
+  _i_ = 3; p->expr_->accept(this);
+  render("cast");
   render("as");
   _i_ = 2; p->type_->accept(this);
 
@@ -1229,6 +1319,32 @@ void PrintAbsyn::visitLogicAnd(LogicAnd *p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitRef(Ref *p)
+{
+  int oldi = _i_;
+  if (oldi > 5) render(STELLA__L_PAREN);
+
+  render("new");
+  render('(');
+  _i_ = 5; p->expr_->accept(this);
+  render(')');
+
+  if (oldi > 5) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitDeref(Deref *p)
+{
+  int oldi = _i_;
+  if (oldi > 5) render(STELLA__L_PAREN);
+
+  render('*');
+  _i_ = 5; p->expr_->accept(this);
+
+  if (oldi > 5) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitApplication(Application *p)
 {
   int oldi = _i_;
@@ -1348,6 +1464,69 @@ void PrintAbsyn::visitTail(Tail *p)
   render('(');
   _i_ = 0; p->expr_->accept(this);
   render(')');
+
+  if (oldi > 6) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitPanic(Panic *p)
+{
+  int oldi = _i_;
+  if (oldi > 6) render(STELLA__L_PAREN);
+
+  render("panic!");
+
+  if (oldi > 6) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitThrow(Throw *p)
+{
+  int oldi = _i_;
+  if (oldi > 6) render(STELLA__L_PAREN);
+
+  render("throw");
+  render('(');
+  _i_ = 0; p->expr_->accept(this);
+  render(')');
+
+  if (oldi > 6) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitTryCatch(TryCatch *p)
+{
+  int oldi = _i_;
+  if (oldi > 6) render(STELLA__L_PAREN);
+
+  render("try");
+  render('{');
+  _i_ = 0; p->expr_1->accept(this);
+  render('}');
+  render("catch");
+  render('{');
+  _i_ = 0; p->pattern_->accept(this);
+  render("=>");
+  _i_ = 0; p->expr_2->accept(this);
+  render('}');
+
+  if (oldi > 6) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitTryWith(TryWith *p)
+{
+  int oldi = _i_;
+  if (oldi > 6) render(STELLA__L_PAREN);
+
+  render("try");
+  render('{');
+  _i_ = 0; p->expr_1->accept(this);
+  render('}');
+  render("with");
+  render('{');
+  _i_ = 0; p->expr_2->accept(this);
+  render('}');
 
   if (oldi > 6) render(STELLA__R_PAREN);
   _i_ = oldi;
@@ -1538,6 +1717,17 @@ void PrintAbsyn::visitConstInt(ConstInt *p)
   if (oldi > 7) render(STELLA__L_PAREN);
 
   visitInteger(p->integer_);
+
+  if (oldi > 7) render(STELLA__R_PAREN);
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitConstMemory(ConstMemory *p)
+{
+  int oldi = _i_;
+  if (oldi > 7) render(STELLA__L_PAREN);
+
+  visitMemoryAddress(p->memoryaddress_);
 
   if (oldi > 7) render(STELLA__R_PAREN);
   _i_ = oldi;
@@ -1743,6 +1933,12 @@ void PrintAbsyn::visitExtensionName(String s)
 }
 
 
+void PrintAbsyn::visitMemoryAddress(String s)
+{
+  render(s);
+}
+
+
 ShowAbsyn::ShowAbsyn(void)
 {
   buf_ = 0;
@@ -1864,6 +2060,28 @@ void ShowAbsyn::visitDeclTypeAlias(DeclTypeAlias *p)
 {
   bufAppend('(');
   bufAppend("DeclTypeAlias");
+  bufAppend(' ');
+  visitStellaIdent(p->stellaident_);
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->type_)  p->type_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitDeclExceptionType(DeclExceptionType *p)
+{
+  bufAppend('(');
+  bufAppend("DeclExceptionType");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->type_)  p->type_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitDeclExceptionVariant(DeclExceptionVariant *p)
+{
+  bufAppend('(');
+  bufAppend("DeclExceptionVariant");
   bufAppend(' ');
   visitStellaIdent(p->stellaident_);
   bufAppend(' ');
@@ -2065,6 +2283,24 @@ void ShowAbsyn::visitTypeNat(TypeNat *p)
 void ShowAbsyn::visitTypeUnit(TypeUnit *p)
 {
   bufAppend("TypeUnit");
+}
+void ShowAbsyn::visitTypeTop(TypeTop *p)
+{
+  bufAppend("TypeTop");
+}
+void ShowAbsyn::visitTypeBottom(TypeBottom *p)
+{
+  bufAppend("TypeBottom");
+}
+void ShowAbsyn::visitTypeRef(TypeRef *p)
+{
+  bufAppend('(');
+  bufAppend("TypeRef");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->type_)  p->type_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
 }
 void ShowAbsyn::visitTypeVar(TypeVar *p)
 {
@@ -2343,18 +2579,6 @@ void ShowAbsyn::visitSequence(Sequence *p)
   p->expr_2->accept(this);
   bufAppend(')');
 }
-void ShowAbsyn::visitIf(If *p)
-{
-  bufAppend('(');
-  bufAppend("If");
-  bufAppend(' ');
-  p->expr_1->accept(this);
-  bufAppend(' ');
-  p->expr_2->accept(this);
-  bufAppend(' ');
-  p->expr_3->accept(this);
-  bufAppend(')');
-}
 void ShowAbsyn::visitLet(Let *p)
 {
   bufAppend('(');
@@ -2381,6 +2605,28 @@ void ShowAbsyn::visitLetRec(LetRec *p)
   bufAppend('[');
   if (p->expr_)  p->expr_->accept(this);
   bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitAssign(Assign *p)
+{
+  bufAppend('(');
+  bufAppend("Assign");
+  bufAppend(' ');
+  p->expr_1->accept(this);
+  bufAppend(' ');
+  p->expr_2->accept(this);
+  bufAppend(')');
+}
+void ShowAbsyn::visitIf(If *p)
+{
+  bufAppend('(');
+  bufAppend("If");
+  bufAppend(' ');
+  p->expr_1->accept(this);
+  bufAppend(' ');
+  p->expr_2->accept(this);
+  bufAppend(' ');
+  p->expr_3->accept(this);
   bufAppend(')');
 }
 void ShowAbsyn::visitLessThan(LessThan *p)
@@ -2447,6 +2693,20 @@ void ShowAbsyn::visitTypeAsc(TypeAsc *p)
 {
   bufAppend('(');
   bufAppend("TypeAsc");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->expr_)  p->expr_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->type_)  p->type_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitTypeCast(TypeCast *p)
+{
+  bufAppend('(');
+  bufAppend("TypeCast");
   bufAppend(' ');
   bufAppend('[');
   if (p->expr_)  p->expr_->accept(this);
@@ -2571,6 +2831,27 @@ void ShowAbsyn::visitLogicAnd(LogicAnd *p)
   p->expr_2->accept(this);
   bufAppend(')');
 }
+void ShowAbsyn::visitRef(Ref *p)
+{
+  bufAppend('(');
+  bufAppend("Ref");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->expr_)  p->expr_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
+  bufAppend(')');
+}
+void ShowAbsyn::visitDeref(Deref *p)
+{
+  bufAppend('(');
+  bufAppend("Deref");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->expr_)  p->expr_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
 void ShowAbsyn::visitApplication(Application *p)
 {
   bufAppend('(');
@@ -2673,6 +2954,47 @@ void ShowAbsyn::visitTail(Tail *p)
   bufAppend('[');
   if (p->expr_)  p->expr_->accept(this);
   bufAppend(']');
+  bufAppend(' ');
+  bufAppend(')');
+}
+void ShowAbsyn::visitPanic(Panic *p)
+{
+  bufAppend("Panic");
+}
+void ShowAbsyn::visitThrow(Throw *p)
+{
+  bufAppend('(');
+  bufAppend("Throw");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->expr_)  p->expr_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
+  bufAppend(')');
+}
+void ShowAbsyn::visitTryCatch(TryCatch *p)
+{
+  bufAppend('(');
+  bufAppend("TryCatch");
+  bufAppend(' ');
+  p->expr_1->accept(this);
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->pattern_)  p->pattern_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
+  p->expr_2->accept(this);
+  bufAppend(' ');
+  bufAppend(')');
+}
+void ShowAbsyn::visitTryWith(TryWith *p)
+{
+  bufAppend('(');
+  bufAppend("TryWith");
+  bufAppend(' ');
+  p->expr_1->accept(this);
+  bufAppend(' ');
+  p->expr_2->accept(this);
   bufAppend(' ');
   bufAppend(')');
 }
@@ -2812,6 +3134,14 @@ void ShowAbsyn::visitConstInt(ConstInt *p)
   bufAppend("ConstInt");
   bufAppend(' ');
   visitInteger(p->integer_);
+  bufAppend(')');
+}
+void ShowAbsyn::visitConstMemory(ConstMemory *p)
+{
+  bufAppend('(');
+  bufAppend("ConstMemory");
+  bufAppend(' ');
+  visitMemoryAddress(p->memoryaddress_);
   bufAppend(')');
 }
 void ShowAbsyn::visitVar(Var *p)
@@ -2958,6 +3288,14 @@ void ShowAbsyn::visitStellaIdent(String s)
 
 
 void ShowAbsyn::visitExtensionName(String s)
+{
+  bufAppend('\"');
+  bufAppend(s);
+  bufAppend('\"');
+}
+
+
+void ShowAbsyn::visitMemoryAddress(String s)
 {
   bufAppend('\"');
   bufAppend(s);

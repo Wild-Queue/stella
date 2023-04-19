@@ -257,6 +257,97 @@ DeclTypeAlias *DeclTypeAlias::clone() const
 
 
 
+/********************   DeclExceptionType    ********************/
+DeclExceptionType::DeclExceptionType(Type *p1)
+{
+  type_ = p1;
+
+}
+
+DeclExceptionType::DeclExceptionType(const DeclExceptionType & other)
+{
+  type_ = other.type_->clone();
+
+}
+
+DeclExceptionType &DeclExceptionType::operator=(const DeclExceptionType & other)
+{
+  DeclExceptionType tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void DeclExceptionType::swap(DeclExceptionType & other)
+{
+  std::swap(type_, other.type_);
+
+}
+
+DeclExceptionType::~DeclExceptionType()
+{
+  delete(type_);
+
+}
+
+void DeclExceptionType::accept(Visitor *v)
+{
+  v->visitDeclExceptionType(this);
+}
+
+DeclExceptionType *DeclExceptionType::clone() const
+{
+  return new DeclExceptionType(*this);
+}
+
+
+
+/********************   DeclExceptionVariant    ********************/
+DeclExceptionVariant::DeclExceptionVariant(StellaIdent p1, Type *p2)
+{
+  stellaident_ = p1;
+  type_ = p2;
+
+}
+
+DeclExceptionVariant::DeclExceptionVariant(const DeclExceptionVariant & other)
+{
+  stellaident_ = other.stellaident_;
+  type_ = other.type_->clone();
+
+}
+
+DeclExceptionVariant &DeclExceptionVariant::operator=(const DeclExceptionVariant & other)
+{
+  DeclExceptionVariant tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void DeclExceptionVariant::swap(DeclExceptionVariant & other)
+{
+  std::swap(stellaident_, other.stellaident_);
+  std::swap(type_, other.type_);
+
+}
+
+DeclExceptionVariant::~DeclExceptionVariant()
+{
+  delete(type_);
+
+}
+
+void DeclExceptionVariant::accept(Visitor *v)
+{
+  v->visitDeclExceptionVariant(this);
+}
+
+DeclExceptionVariant *DeclExceptionVariant::clone() const
+{
+  return new DeclExceptionVariant(*this);
+}
+
+
+
 /********************   ALocalDecl    ********************/
 ALocalDecl::ALocalDecl(Decl *p1)
 {
@@ -991,6 +1082,130 @@ void TypeUnit::accept(Visitor *v)
 TypeUnit *TypeUnit::clone() const
 {
   return new TypeUnit(*this);
+}
+
+
+
+/********************   TypeTop    ********************/
+TypeTop::TypeTop()
+{
+
+}
+
+TypeTop::TypeTop(const TypeTop & other)
+{
+
+}
+
+TypeTop &TypeTop::operator=(const TypeTop & other)
+{
+  TypeTop tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void TypeTop::swap(TypeTop & other)
+{
+
+}
+
+TypeTop::~TypeTop()
+{
+
+}
+
+void TypeTop::accept(Visitor *v)
+{
+  v->visitTypeTop(this);
+}
+
+TypeTop *TypeTop::clone() const
+{
+  return new TypeTop(*this);
+}
+
+
+
+/********************   TypeBottom    ********************/
+TypeBottom::TypeBottom()
+{
+
+}
+
+TypeBottom::TypeBottom(const TypeBottom & other)
+{
+
+}
+
+TypeBottom &TypeBottom::operator=(const TypeBottom & other)
+{
+  TypeBottom tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void TypeBottom::swap(TypeBottom & other)
+{
+
+}
+
+TypeBottom::~TypeBottom()
+{
+
+}
+
+void TypeBottom::accept(Visitor *v)
+{
+  v->visitTypeBottom(this);
+}
+
+TypeBottom *TypeBottom::clone() const
+{
+  return new TypeBottom(*this);
+}
+
+
+
+/********************   TypeRef    ********************/
+TypeRef::TypeRef(Type *p1)
+{
+  type_ = p1;
+
+}
+
+TypeRef::TypeRef(const TypeRef & other)
+{
+  type_ = other.type_->clone();
+
+}
+
+TypeRef &TypeRef::operator=(const TypeRef & other)
+{
+  TypeRef tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void TypeRef::swap(TypeRef & other)
+{
+  std::swap(type_, other.type_);
+
+}
+
+TypeRef::~TypeRef()
+{
+  delete(type_);
+
+}
+
+void TypeRef::accept(Visitor *v)
+{
+  v->visitTypeRef(this);
+}
+
+TypeRef *TypeRef::clone() const
+{
+  return new TypeRef(*this);
 }
 
 
@@ -2045,6 +2260,54 @@ Sequence *Sequence::clone() const
 
 
 
+/********************   Assign    ********************/
+Assign::Assign(Expr *p1, Expr *p2)
+{
+  expr_1 = p1;
+  expr_2 = p2;
+
+}
+
+Assign::Assign(const Assign & other)
+{
+  expr_1 = other.expr_1->clone();
+  expr_2 = other.expr_2->clone();
+
+}
+
+Assign &Assign::operator=(const Assign & other)
+{
+  Assign tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void Assign::swap(Assign & other)
+{
+  std::swap(expr_1, other.expr_1);
+  std::swap(expr_2, other.expr_2);
+
+}
+
+Assign::~Assign()
+{
+  delete(expr_1);
+  delete(expr_2);
+
+}
+
+void Assign::accept(Visitor *v)
+{
+  v->visitAssign(this);
+}
+
+Assign *Assign::clone() const
+{
+  return new Assign(*this);
+}
+
+
+
 /********************   If    ********************/
 If::If(Expr *p1, Expr *p2, Expr *p3)
 {
@@ -2529,6 +2792,54 @@ TypeAsc *TypeAsc::clone() const
 
 
 
+/********************   TypeCast    ********************/
+TypeCast::TypeCast(Expr *p1, Type *p2)
+{
+  expr_ = p1;
+  type_ = p2;
+
+}
+
+TypeCast::TypeCast(const TypeCast & other)
+{
+  expr_ = other.expr_->clone();
+  type_ = other.type_->clone();
+
+}
+
+TypeCast &TypeCast::operator=(const TypeCast & other)
+{
+  TypeCast tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void TypeCast::swap(TypeCast & other)
+{
+  std::swap(expr_, other.expr_);
+  std::swap(type_, other.type_);
+
+}
+
+TypeCast::~TypeCast()
+{
+  delete(expr_);
+  delete(type_);
+
+}
+
+void TypeCast::accept(Visitor *v)
+{
+  v->visitTypeCast(this);
+}
+
+TypeCast *TypeCast::clone() const
+{
+  return new TypeCast(*this);
+}
+
+
+
 /********************   Abstraction    ********************/
 Abstraction::Abstraction(ListParamDecl *p1, Expr *p2)
 {
@@ -3004,6 +3315,94 @@ LogicAnd *LogicAnd::clone() const
 
 
 
+/********************   Ref    ********************/
+Ref::Ref(Expr *p1)
+{
+  expr_ = p1;
+
+}
+
+Ref::Ref(const Ref & other)
+{
+  expr_ = other.expr_->clone();
+
+}
+
+Ref &Ref::operator=(const Ref & other)
+{
+  Ref tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void Ref::swap(Ref & other)
+{
+  std::swap(expr_, other.expr_);
+
+}
+
+Ref::~Ref()
+{
+  delete(expr_);
+
+}
+
+void Ref::accept(Visitor *v)
+{
+  v->visitRef(this);
+}
+
+Ref *Ref::clone() const
+{
+  return new Ref(*this);
+}
+
+
+
+/********************   Deref    ********************/
+Deref::Deref(Expr *p1)
+{
+  expr_ = p1;
+
+}
+
+Deref::Deref(const Deref & other)
+{
+  expr_ = other.expr_->clone();
+
+}
+
+Deref &Deref::operator=(const Deref & other)
+{
+  Deref tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void Deref::swap(Deref & other)
+{
+  std::swap(expr_, other.expr_);
+
+}
+
+Deref::~Deref()
+{
+  delete(expr_);
+
+}
+
+void Deref::accept(Visitor *v)
+{
+  v->visitDeref(this);
+}
+
+Deref *Deref::clone() const
+{
+  return new Deref(*this);
+}
+
+
+
 /********************   Application    ********************/
 Application::Application(Expr *p1, ListExpr *p2)
 {
@@ -3410,6 +3809,190 @@ void Tail::accept(Visitor *v)
 Tail *Tail::clone() const
 {
   return new Tail(*this);
+}
+
+
+
+/********************   Panic    ********************/
+Panic::Panic()
+{
+
+}
+
+Panic::Panic(const Panic & other)
+{
+
+}
+
+Panic &Panic::operator=(const Panic & other)
+{
+  Panic tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void Panic::swap(Panic & other)
+{
+
+}
+
+Panic::~Panic()
+{
+
+}
+
+void Panic::accept(Visitor *v)
+{
+  v->visitPanic(this);
+}
+
+Panic *Panic::clone() const
+{
+  return new Panic(*this);
+}
+
+
+
+/********************   Throw    ********************/
+Throw::Throw(Expr *p1)
+{
+  expr_ = p1;
+
+}
+
+Throw::Throw(const Throw & other)
+{
+  expr_ = other.expr_->clone();
+
+}
+
+Throw &Throw::operator=(const Throw & other)
+{
+  Throw tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void Throw::swap(Throw & other)
+{
+  std::swap(expr_, other.expr_);
+
+}
+
+Throw::~Throw()
+{
+  delete(expr_);
+
+}
+
+void Throw::accept(Visitor *v)
+{
+  v->visitThrow(this);
+}
+
+Throw *Throw::clone() const
+{
+  return new Throw(*this);
+}
+
+
+
+/********************   TryCatch    ********************/
+TryCatch::TryCatch(Expr *p1, Pattern *p2, Expr *p3)
+{
+  expr_1 = p1;
+  pattern_ = p2;
+  expr_2 = p3;
+
+}
+
+TryCatch::TryCatch(const TryCatch & other)
+{
+  expr_1 = other.expr_1->clone();
+  pattern_ = other.pattern_->clone();
+  expr_2 = other.expr_2->clone();
+
+}
+
+TryCatch &TryCatch::operator=(const TryCatch & other)
+{
+  TryCatch tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void TryCatch::swap(TryCatch & other)
+{
+  std::swap(expr_1, other.expr_1);
+  std::swap(pattern_, other.pattern_);
+  std::swap(expr_2, other.expr_2);
+
+}
+
+TryCatch::~TryCatch()
+{
+  delete(expr_1);
+  delete(pattern_);
+  delete(expr_2);
+
+}
+
+void TryCatch::accept(Visitor *v)
+{
+  v->visitTryCatch(this);
+}
+
+TryCatch *TryCatch::clone() const
+{
+  return new TryCatch(*this);
+}
+
+
+
+/********************   TryWith    ********************/
+TryWith::TryWith(Expr *p1, Expr *p2)
+{
+  expr_1 = p1;
+  expr_2 = p2;
+
+}
+
+TryWith::TryWith(const TryWith & other)
+{
+  expr_1 = other.expr_1->clone();
+  expr_2 = other.expr_2->clone();
+
+}
+
+TryWith &TryWith::operator=(const TryWith & other)
+{
+  TryWith tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void TryWith::swap(TryWith & other)
+{
+  std::swap(expr_1, other.expr_1);
+  std::swap(expr_2, other.expr_2);
+
+}
+
+TryWith::~TryWith()
+{
+  delete(expr_1);
+  delete(expr_2);
+
+}
+
+void TryWith::accept(Visitor *v)
+{
+  v->visitTryWith(this);
+}
+
+TryWith *TryWith::clone() const
+{
+  return new TryWith(*this);
 }
 
 
@@ -4029,6 +4612,49 @@ void ConstInt::accept(Visitor *v)
 ConstInt *ConstInt::clone() const
 {
   return new ConstInt(*this);
+}
+
+
+
+/********************   ConstMemory    ********************/
+ConstMemory::ConstMemory(MemoryAddress p1)
+{
+  memoryaddress_ = p1;
+
+}
+
+ConstMemory::ConstMemory(const ConstMemory & other)
+{
+  memoryaddress_ = other.memoryaddress_;
+
+}
+
+ConstMemory &ConstMemory::operator=(const ConstMemory & other)
+{
+  ConstMemory tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void ConstMemory::swap(ConstMemory & other)
+{
+  std::swap(memoryaddress_, other.memoryaddress_);
+
+}
+
+ConstMemory::~ConstMemory()
+{
+
+}
+
+void ConstMemory::accept(Visitor *v)
+{
+  v->visitConstMemory(this);
+}
+
+ConstMemory *ConstMemory::clone() const
+{
+  return new ConstMemory(*this);
 }
 
 

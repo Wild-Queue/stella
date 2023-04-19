@@ -82,6 +82,23 @@ void Skeleton::visitDeclTypeAlias(DeclTypeAlias *decl_type_alias)
 
 }
 
+void Skeleton::visitDeclExceptionType(DeclExceptionType *decl_exception_type)
+{
+  /* Code For DeclExceptionType Goes Here */
+
+  if (decl_exception_type->type_) decl_exception_type->type_->accept(this);
+
+}
+
+void Skeleton::visitDeclExceptionVariant(DeclExceptionVariant *decl_exception_variant)
+{
+  /* Code For DeclExceptionVariant Goes Here */
+
+  visitStellaIdent(decl_exception_variant->stellaident_);
+  if (decl_exception_variant->type_) decl_exception_variant->type_->accept(this);
+
+}
+
 void Skeleton::visitALocalDecl(ALocalDecl *a_local_decl)
 {
   /* Code For ALocalDecl Goes Here */
@@ -213,6 +230,28 @@ void Skeleton::visitTypeUnit(TypeUnit *type_unit)
 {
   /* Code For TypeUnit Goes Here */
 
+
+}
+
+void Skeleton::visitTypeTop(TypeTop *type_top)
+{
+  /* Code For TypeTop Goes Here */
+
+
+}
+
+void Skeleton::visitTypeBottom(TypeBottom *type_bottom)
+{
+  /* Code For TypeBottom Goes Here */
+
+
+}
+
+void Skeleton::visitTypeRef(TypeRef *type_ref)
+{
+  /* Code For TypeRef Goes Here */
+
+  if (type_ref->type_) type_ref->type_->accept(this);
 
 }
 
@@ -408,6 +447,15 @@ void Skeleton::visitSequence(Sequence *sequence)
 
 }
 
+void Skeleton::visitAssign(Assign *assign)
+{
+  /* Code For Assign Goes Here */
+
+  if (assign->expr_1) assign->expr_1->accept(this);
+  if (assign->expr_2) assign->expr_2->accept(this);
+
+}
+
 void Skeleton::visitIf(If *if_)
 {
   /* Code For If Goes Here */
@@ -496,6 +544,15 @@ void Skeleton::visitTypeAsc(TypeAsc *type_asc)
 
   if (type_asc->expr_) type_asc->expr_->accept(this);
   if (type_asc->type_) type_asc->type_->accept(this);
+
+}
+
+void Skeleton::visitTypeCast(TypeCast *type_cast)
+{
+  /* Code For TypeCast Goes Here */
+
+  if (type_cast->expr_) type_cast->expr_->accept(this);
+  if (type_cast->type_) type_cast->type_->accept(this);
 
 }
 
@@ -588,6 +645,22 @@ void Skeleton::visitLogicAnd(LogicAnd *logic_and)
 
 }
 
+void Skeleton::visitRef(Ref *ref)
+{
+  /* Code For Ref Goes Here */
+
+  if (ref->expr_) ref->expr_->accept(this);
+
+}
+
+void Skeleton::visitDeref(Deref *deref)
+{
+  /* Code For Deref Goes Here */
+
+  if (deref->expr_) deref->expr_->accept(this);
+
+}
+
 void Skeleton::visitApplication(Application *application)
 {
   /* Code For Application Goes Here */
@@ -661,6 +734,40 @@ void Skeleton::visitTail(Tail *tail)
   /* Code For Tail Goes Here */
 
   if (tail->expr_) tail->expr_->accept(this);
+
+}
+
+void Skeleton::visitPanic(Panic *panic)
+{
+  /* Code For Panic Goes Here */
+
+
+}
+
+void Skeleton::visitThrow(Throw *throw_)
+{
+  /* Code For Throw Goes Here */
+
+  if (throw_->expr_) throw_->expr_->accept(this);
+
+}
+
+void Skeleton::visitTryCatch(TryCatch *try_catch)
+{
+  /* Code For TryCatch Goes Here */
+
+  if (try_catch->expr_1) try_catch->expr_1->accept(this);
+  if (try_catch->pattern_) try_catch->pattern_->accept(this);
+  if (try_catch->expr_2) try_catch->expr_2->accept(this);
+
+}
+
+void Skeleton::visitTryWith(TryWith *try_with)
+{
+  /* Code For TryWith Goes Here */
+
+  if (try_with->expr_1) try_with->expr_1->accept(this);
+  if (try_with->expr_2) try_with->expr_2->accept(this);
 
 }
 
@@ -774,6 +881,14 @@ void Skeleton::visitConstInt(ConstInt *const_int)
   /* Code For ConstInt Goes Here */
 
   visitInteger(const_int->integer_);
+
+}
+
+void Skeleton::visitConstMemory(ConstMemory *const_memory)
+{
+  /* Code For ConstMemory Goes Here */
+
+  visitMemoryAddress(const_memory->memoryaddress_);
 
 }
 
@@ -984,6 +1099,11 @@ void Skeleton::visitStellaIdent(StellaIdent x)
 void Skeleton::visitExtensionName(ExtensionName x)
 {
   /* Code for ExtensionName Goes Here */
+}
+
+void Skeleton::visitMemoryAddress(MemoryAddress x)
+{
+  /* Code for MemoryAddress Goes Here */
 }
 
 
