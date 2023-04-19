@@ -51,6 +51,8 @@ class PrintAbsyn : public Visitor
   void visitDecl(Decl *p); /* abstract class */
   void visitDeclFun(DeclFun *p);
   void visitDeclTypeAlias(DeclTypeAlias *p);
+  void visitDeclExceptionType(DeclExceptionType *p);
+  void visitDeclExceptionVariant(DeclExceptionVariant *p);
   void visitListDecl(ListDecl *p);
   void iterListDecl(ListDecl::const_iterator i, ListDecl::const_iterator j);
   void visitLocalDecl(LocalDecl *p); /* abstract class */
@@ -82,6 +84,9 @@ class PrintAbsyn : public Visitor
   void visitTypeBool(TypeBool *p);
   void visitTypeNat(TypeNat *p);
   void visitTypeUnit(TypeUnit *p);
+  void visitTypeTop(TypeTop *p);
+  void visitTypeBottom(TypeBottom *p);
+  void visitTypeRef(TypeRef *p);
   void visitTypeVar(TypeVar *p);
   void visitListType(ListType *p);
   void iterListType(ListType::const_iterator i, ListType::const_iterator j);
@@ -124,9 +129,10 @@ class PrintAbsyn : public Visitor
   void iterListBinding(ListBinding::const_iterator i, ListBinding::const_iterator j);
   void visitExpr(Expr *p); /* abstract class */
   void visitSequence(Sequence *p);
-  void visitIf(If *p);
   void visitLet(Let *p);
   void visitLetRec(LetRec *p);
+  void visitAssign(Assign *p);
+  void visitIf(If *p);
   void visitLessThan(LessThan *p);
   void visitLessThanOrEqual(LessThanOrEqual *p);
   void visitGreaterThan(GreaterThan *p);
@@ -134,6 +140,7 @@ class PrintAbsyn : public Visitor
   void visitEqual(Equal *p);
   void visitNotEqual(NotEqual *p);
   void visitTypeAsc(TypeAsc *p);
+  void visitTypeCast(TypeCast *p);
   void visitAbstraction(Abstraction *p);
   void visitVariant(Variant *p);
   void visitMatch(Match *p);
@@ -144,6 +151,8 @@ class PrintAbsyn : public Visitor
   void visitMultiply(Multiply *p);
   void visitDivide(Divide *p);
   void visitLogicAnd(LogicAnd *p);
+  void visitRef(Ref *p);
+  void visitDeref(Deref *p);
   void visitApplication(Application *p);
   void visitDotRecord(DotRecord *p);
   void visitDotTuple(DotTuple *p);
@@ -153,6 +162,10 @@ class PrintAbsyn : public Visitor
   void visitHead(Head *p);
   void visitIsEmpty(IsEmpty *p);
   void visitTail(Tail *p);
+  void visitPanic(Panic *p);
+  void visitThrow(Throw *p);
+  void visitTryCatch(TryCatch *p);
+  void visitTryWith(TryWith *p);
   void visitInl(Inl *p);
   void visitInr(Inr *p);
   void visitSucc(Succ *p);
@@ -167,6 +180,7 @@ class PrintAbsyn : public Visitor
   void visitConstFalse(ConstFalse *p);
   void visitConstUnit(ConstUnit *p);
   void visitConstInt(ConstInt *p);
+  void visitConstMemory(ConstMemory *p);
   void visitVar(Var *p);
   void visitListExpr(ListExpr *p);
   void iterListExpr(ListExpr::const_iterator i, ListExpr::const_iterator j);
@@ -192,6 +206,7 @@ class PrintAbsyn : public Visitor
   void visitIdent(String s);
   void visitStellaIdent(String s);
   void visitExtensionName(String s);
+  void visitMemoryAddress(String s);
  protected:
   char *buf_;
   size_t cur_, buf_size;
@@ -269,6 +284,8 @@ class ShowAbsyn : public Visitor
   void visitDecl(Decl *p); /* abstract class */
   void visitDeclFun(DeclFun *p);
   void visitDeclTypeAlias(DeclTypeAlias *p);
+  void visitDeclExceptionType(DeclExceptionType *p);
+  void visitDeclExceptionVariant(DeclExceptionVariant *p);
   void visitListDecl(ListDecl *p);
   void iterListDecl(ListDecl::const_iterator i, ListDecl::const_iterator j);
   void visitLocalDecl(LocalDecl *p); /* abstract class */
@@ -300,6 +317,9 @@ class ShowAbsyn : public Visitor
   void visitTypeBool(TypeBool *p);
   void visitTypeNat(TypeNat *p);
   void visitTypeUnit(TypeUnit *p);
+  void visitTypeTop(TypeTop *p);
+  void visitTypeBottom(TypeBottom *p);
+  void visitTypeRef(TypeRef *p);
   void visitTypeVar(TypeVar *p);
   void visitListType(ListType *p);
   void iterListType(ListType::const_iterator i, ListType::const_iterator j);
@@ -342,9 +362,10 @@ class ShowAbsyn : public Visitor
   void iterListBinding(ListBinding::const_iterator i, ListBinding::const_iterator j);
   void visitExpr(Expr *p); /* abstract class */
   void visitSequence(Sequence *p);
-  void visitIf(If *p);
   void visitLet(Let *p);
   void visitLetRec(LetRec *p);
+  void visitAssign(Assign *p);
+  void visitIf(If *p);
   void visitLessThan(LessThan *p);
   void visitLessThanOrEqual(LessThanOrEqual *p);
   void visitGreaterThan(GreaterThan *p);
@@ -352,6 +373,7 @@ class ShowAbsyn : public Visitor
   void visitEqual(Equal *p);
   void visitNotEqual(NotEqual *p);
   void visitTypeAsc(TypeAsc *p);
+  void visitTypeCast(TypeCast *p);
   void visitAbstraction(Abstraction *p);
   void visitVariant(Variant *p);
   void visitMatch(Match *p);
@@ -362,6 +384,8 @@ class ShowAbsyn : public Visitor
   void visitMultiply(Multiply *p);
   void visitDivide(Divide *p);
   void visitLogicAnd(LogicAnd *p);
+  void visitRef(Ref *p);
+  void visitDeref(Deref *p);
   void visitApplication(Application *p);
   void visitDotRecord(DotRecord *p);
   void visitDotTuple(DotTuple *p);
@@ -371,6 +395,10 @@ class ShowAbsyn : public Visitor
   void visitHead(Head *p);
   void visitIsEmpty(IsEmpty *p);
   void visitTail(Tail *p);
+  void visitPanic(Panic *p);
+  void visitThrow(Throw *p);
+  void visitTryCatch(TryCatch *p);
+  void visitTryWith(TryWith *p);
   void visitInl(Inl *p);
   void visitInr(Inr *p);
   void visitSucc(Succ *p);
@@ -385,6 +413,7 @@ class ShowAbsyn : public Visitor
   void visitConstFalse(ConstFalse *p);
   void visitConstUnit(ConstUnit *p);
   void visitConstInt(ConstInt *p);
+  void visitConstMemory(ConstMemory *p);
   void visitVar(Var *p);
   void visitListExpr(ListExpr *p);
   void iterListExpr(ListExpr::const_iterator i, ListExpr::const_iterator j);
@@ -410,6 +439,7 @@ class ShowAbsyn : public Visitor
   void visitIdent(String s);
   void visitStellaIdent(String s);
   void visitExtensionName(String s);
+  void visitMemoryAddress(String s);
  protected:
   char *buf_;
   size_t cur_, buf_size;

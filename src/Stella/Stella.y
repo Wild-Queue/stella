@@ -108,6 +108,7 @@ extern int yylex(YYSTYPE *lvalp, YYLTYPE *llocp, yyscan_t scanner);
 
 %token          _ERROR_
 %token          _BANGEQ          /* != */
+%token          _AMP             /* & */
 %token          _LPAREN          /* ( */
 %token          _RPAREN          /* ) */
 %token          _STAR            /* * */
@@ -118,6 +119,7 @@ extern int yylex(YYSTYPE *lvalp, YYLTYPE *llocp, yyscan_t scanner);
 %token          _DOT             /* . */
 %token          _SLASH           /* / */
 %token          _COLON           /* : */
+%token          _COLONEQ         /* := */
 %token          _SEMI            /* ; */
 %token          _LT              /* < */
 %token          _LDARROW         /* <= */
@@ -128,21 +130,26 @@ extern int yylex(YYSTYPE *lvalp, YYLTYPE *llocp, yyscan_t scanner);
 %token          _GT              /* > */
 %token          _GTEQ            /* >= */
 %token          _KW_Bool         /* Bool */
-%token          _SYMB_26         /* List::head */
-%token          _SYMB_27         /* List::isempty */
-%token          _SYMB_28         /* List::tail */
+%token          _KW_Bot          /* Bot */
+%token          _SYMB_27         /* List::head */
+%token          _SYMB_28         /* List::isempty */
+%token          _SYMB_29         /* List::tail */
 %token          _KW_Nat          /* Nat */
-%token          _SYMB_30         /* Nat::iszero */
-%token          _SYMB_29         /* Nat::pred */
-%token          _SYMB_31         /* Nat::rec */
+%token          _SYMB_32         /* Nat::iszero */
+%token          _SYMB_31         /* Nat::pred */
+%token          _SYMB_33         /* Nat::rec */
+%token          _KW_Top          /* Top */
 %token          _KW_Unit         /* Unit */
 %token          _LBRACK          /* [ */
 %token          _RBRACK          /* ] */
 %token          _KW_and          /* and */
 %token          _KW_as           /* as */
+%token          _KW_cast         /* cast */
+%token          _KW_catch        /* catch */
 %token          _KW_cons         /* cons */
 %token          _KW_core         /* core */
 %token          _KW_else         /* else */
+%token          _KW_exception    /* exception */
 %token          _KW_extend       /* extend */
 %token          _KW_false        /* false */
 %token          _KW_fix          /* fix */
@@ -157,23 +164,29 @@ extern int yylex(YYSTYPE *lvalp, YYLTYPE *llocp, yyscan_t scanner);
 %token          _KW_let          /* let */
 %token          _KW_letrec       /* letrec */
 %token          _KW_match        /* match */
+%token          _KW_new          /* new */
 %token          _KW_not          /* not */
 %token          _KW_or           /* or */
+%token          _SYMB_30         /* panic! */
 %token          _KW_return       /* return */
 %token          _KW_succ         /* succ */
 %token          _KW_then         /* then */
+%token          _KW_throw        /* throw */
 %token          _KW_throws       /* throws */
 %token          _KW_true         /* true */
+%token          _KW_try          /* try */
 %token          _KW_type         /* type */
 %token          _KW_unfold       /* unfold */
 %token          _KW_unit         /* unit */
+%token          _KW_variant      /* variant */
 %token          _KW_with         /* with */
 %token          _LBRACE          /* { */
 %token          _BAR             /* | */
 %token          _SYMB_12         /* |> */
 %token          _RBRACE          /* } */
-%token          _KW_65           /* µ */
+%token          _KW_77           /* µ */
 %token<_string> T_ExtensionName  /* ExtensionName */
+%token<_string> T_MemoryAddress  /* MemoryAddress */
 %token<_string> T_StellaIdent    /* StellaIdent */
 %token<_int>    _INTEGER_
 
@@ -215,6 +228,7 @@ extern int yylex(YYSTYPE *lvalp, YYLTYPE *llocp, yyscan_t scanner);
 %type <listexpr_> ListExpr2
 %type <expr_> Expr3
 %type <expr_> Expr4
+%type <expr_> Expr5
 %type <expr_> Expr6
 %type <expr_> Expr7
 %type <type_> Type
@@ -222,7 +236,6 @@ extern int yylex(YYSTYPE *lvalp, YYLTYPE *llocp, yyscan_t scanner);
 %type <type_> Type2
 %type <type_> Type3
 %type <listtype_> ListType
-%type <expr_> Expr5
 %type <variantfieldtype_> VariantFieldType
 %type <listvariantfieldtype_> ListVariantFieldType
 %type <recordfieldtype_> RecordFieldType
@@ -252,6 +265,8 @@ ListExtension : /* empty */ { $$ = new Stella::ListExtension(); result->listexte
 ;
 Decl : ListAnnotation _KW_fn T_StellaIdent _LPAREN ListParamDecl _RPAREN ReturnType ThrowType _LBRACE ListDecl _KW_return Expr _RBRACE { std::reverse($5->begin(),$5->end()) ;$$ = new Stella::DeclFun($1, $3, $5, $7, $8, $10, $12); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->decl_ = $$; }
   | _KW_type T_StellaIdent _EQ Type { $$ = new Stella::DeclTypeAlias($2, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->decl_ = $$; }
+  | _KW_exception _KW_type _EQ Type { $$ = new Stella::DeclExceptionType($4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->decl_ = $$; }
+  | _KW_exception _KW_variant T_StellaIdent _COLON Type { $$ = new Stella::DeclExceptionVariant($3, $5); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->decl_ = $$; }
 ;
 ListDecl : /* empty */ { $$ = new Stella::ListDecl(); result->listdecl_ = $$; }
   | ListDecl Decl { $1->push_back($2); $$ = $1; result->listdecl_ = $$; }
@@ -329,15 +344,16 @@ ListBinding : Binding { $$ = new Stella::ListBinding(); $$->push_back($1); resul
 ;
 Expr : Expr1 _SEMI Expr { $$ = new Stella::Sequence($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | Expr1 _SEMI { $$ = $1; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _KW_let ListPatternBinding _KW_in Expr { std::reverse($2->begin(),$2->end()) ;$$ = new Stella::Let($2, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _KW_letrec ListPatternBinding _KW_in Expr { std::reverse($2->begin(),$2->end()) ;$$ = new Stella::LetRec($2, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | Expr1 { $$ = $1; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
 ;
 ListExpr : /* empty */ { $$ = new Stella::ListExpr(); result->listexpr_ = $$; }
   | Expr { $$ = new Stella::ListExpr(); $$->push_back($1); result->listexpr_ = $$; }
   | Expr _COMMA ListExpr { $3->push_back($1); $$ = $3; result->listexpr_ = $$; }
 ;
-Expr1 : _KW_if Expr1 _KW_then Expr1 _KW_else Expr1 { $$ = new Stella::If($2, $4, $6); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
-  | _KW_let ListPatternBinding _KW_in Expr1 { std::reverse($2->begin(),$2->end()) ;$$ = new Stella::Let($2, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
-  | _KW_letrec ListPatternBinding _KW_in Expr1 { std::reverse($2->begin(),$2->end()) ;$$ = new Stella::LetRec($2, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+Expr1 : Expr2 _COLONEQ Expr1 { $$ = new Stella::Assign($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _KW_if Expr1 _KW_then Expr1 _KW_else Expr1 { $$ = new Stella::If($2, $4, $6); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | Expr2 { $$ = $1; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
 ;
 PatternBinding : Pattern _EQ Expr { $$ = new Stella::APatternBinding($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->patternbinding_ = $$; }
@@ -357,6 +373,7 @@ ListExpr2 : Expr2 _SEMI { $$ = new Stella::ListExpr(); $$->push_back($1); result
   | Expr2 _SEMI ListExpr2 { $3->push_back($1); $$ = $3; result->listexpr_ = $$; }
 ;
 Expr3 : Expr3 _KW_as Type2 { $$ = new Stella::TypeAsc($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | Expr3 _KW_cast _KW_as Type2 { $$ = new Stella::TypeCast($1, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_fn _LPAREN ListParamDecl _RPAREN _LBRACE _KW_return Expr _RBRACE { std::reverse($3->begin(),$3->end()) ;$$ = new Stella::Abstraction($3, $7); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _SYMB_11 T_StellaIdent ExprData _SYMB_12 { $$ = new Stella::Variant($2, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_match Expr2 _LBRACE ListMatchCase _RBRACE { std::reverse($4->begin(),$4->end()) ;$$ = new Stella::Match($2, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
@@ -371,23 +388,31 @@ Expr4 : Expr4 _STAR Expr5 { $$ = new Stella::Multiply($1, $3); $$->line_number =
   | Expr4 _KW_and Expr5 { $$ = new Stella::LogicAnd($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | Expr5 { $$ = $1; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
 ;
+Expr5 : _KW_new _LPAREN Expr5 _RPAREN { $$ = new Stella::Ref($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _STAR Expr5 { $$ = new Stella::Deref($2); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | Expr6 { $$ = $1; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+;
 Expr6 : Expr6 _LPAREN ListExpr _RPAREN { std::reverse($3->begin(),$3->end()) ;$$ = new Stella::Application($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | Expr6 _DOT T_StellaIdent { $$ = new Stella::DotRecord($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | Expr6 _DOT _INTEGER_ { $$ = new Stella::DotTuple($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _LBRACE ListExpr _RBRACE { std::reverse($2->begin(),$2->end()) ;$$ = new Stella::Tuple($2); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _LBRACE ListBinding _RBRACE { std::reverse($2->begin(),$2->end()) ;$$ = new Stella::Record($2); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_cons _LPAREN Expr _COMMA Expr _RPAREN { $$ = new Stella::ConsList($3, $5); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
-  | _SYMB_26 _LPAREN Expr _RPAREN { $$ = new Stella::Head($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
-  | _SYMB_27 _LPAREN Expr _RPAREN { $$ = new Stella::IsEmpty($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
-  | _SYMB_28 _LPAREN Expr _RPAREN { $$ = new Stella::Tail($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _SYMB_27 _LPAREN Expr _RPAREN { $$ = new Stella::Head($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _SYMB_28 _LPAREN Expr _RPAREN { $$ = new Stella::IsEmpty($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _SYMB_29 _LPAREN Expr _RPAREN { $$ = new Stella::Tail($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _SYMB_30 { $$ = new Stella::Panic(); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _KW_throw _LPAREN Expr _RPAREN { $$ = new Stella::Throw($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _KW_try _LBRACE Expr _RBRACE _KW_catch _LBRACE Pattern _RDARROW Expr _RBRACE { $$ = new Stella::TryCatch($3, $7, $9); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _KW_try _LBRACE Expr _RBRACE _KW_with _LBRACE Expr _RBRACE { $$ = new Stella::TryWith($3, $7); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_inl _LPAREN Expr _RPAREN { $$ = new Stella::Inl($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_inr _LPAREN Expr _RPAREN { $$ = new Stella::Inr($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_succ _LPAREN Expr _RPAREN { $$ = new Stella::Succ($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_not _LPAREN Expr _RPAREN { $$ = new Stella::LogicNot($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
-  | _SYMB_29 _LPAREN Expr _RPAREN { $$ = new Stella::Pred($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
-  | _SYMB_30 _LPAREN Expr _RPAREN { $$ = new Stella::IsZero($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _SYMB_31 _LPAREN Expr _RPAREN { $$ = new Stella::Pred($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _SYMB_32 _LPAREN Expr _RPAREN { $$ = new Stella::IsZero($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_fix _LPAREN Expr _RPAREN { $$ = new Stella::Fix($3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
-  | _SYMB_31 _LPAREN Expr _COMMA Expr _COMMA Expr _RPAREN { $$ = new Stella::NatRec($3, $5, $7); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | _SYMB_33 _LPAREN Expr _COMMA Expr _COMMA Expr _RPAREN { $$ = new Stella::NatRec($3, $5, $7); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_fold _LBRACK Type _RBRACK Expr7 { $$ = new Stella::Fold($3, $5); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_unfold _LBRACK Type _RBRACK Expr7 { $$ = new Stella::Unfold($3, $5); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | Expr7 { $$ = $1; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
@@ -396,11 +421,12 @@ Expr7 : _KW_true { $$ = new Stella::ConstTrue(); $$->line_number = @$.first_line
   | _KW_false { $$ = new Stella::ConstFalse(); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _KW_unit { $$ = new Stella::ConstUnit(); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _INTEGER_ { $$ = new Stella::ConstInt($1); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
+  | T_MemoryAddress { $$ = new Stella::ConstMemory($1); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | T_StellaIdent { $$ = new Stella::Var($1); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
   | _LPAREN Expr _RPAREN { $$ = $2; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
 ;
 Type : _KW_fn _LPAREN ListType _RPAREN _RARROW Type { std::reverse($3->begin(),$3->end()) ;$$ = new Stella::TypeFun($3, $6); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
-  | _KW_65 T_StellaIdent _DOT Type { $$ = new Stella::TypeRec($2, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
+  | _KW_77 T_StellaIdent _DOT Type { $$ = new Stella::TypeRec($2, $4); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
   | Type1 { $$ = $1; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
 ;
 Type1 : Type2 _PLUS Type2 { $$ = new Stella::TypeSum($1, $3); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
@@ -415,14 +441,15 @@ Type2 : _LBRACE ListType _RBRACE { std::reverse($2->begin(),$2->end()) ;$$ = new
 Type3 : _KW_Bool { $$ = new Stella::TypeBool(); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
   | _KW_Nat { $$ = new Stella::TypeNat(); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
   | _KW_Unit { $$ = new Stella::TypeUnit(); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
+  | _KW_Top { $$ = new Stella::TypeTop(); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
+  | _KW_Bot { $$ = new Stella::TypeBottom(); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
+  | _AMP Type2 { $$ = new Stella::TypeRef($2); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
   | T_StellaIdent { $$ = new Stella::TypeVar($1); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
   | _LPAREN Type _RPAREN { $$ = $2; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->type_ = $$; }
 ;
 ListType : /* empty */ { $$ = new Stella::ListType(); result->listtype_ = $$; }
   | Type { $$ = new Stella::ListType(); $$->push_back($1); result->listtype_ = $$; }
   | Type _COMMA ListType { $3->push_back($1); $$ = $3; result->listtype_ = $$; }
-;
-Expr5 : Expr6 { $$ = $1; $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->expr_ = $$; }
 ;
 VariantFieldType : T_StellaIdent OptionalTyping { $$ = new Stella::AVariantFieldType($1, $2); $$->line_number = @$.first_line; $$->char_number = @$.first_column; result->variantfieldtype_ = $$; }
 ;
@@ -2137,6 +2164,50 @@ Expr* psExpr4(const char *str)
 }
 
 /* Entrypoint: parse Expr* from file. */
+Expr* pExpr5(FILE *inp)
+{
+  YYSTYPE result;
+  yyscan_t scanner = Stella_initialize_lexer(inp);
+  if (!scanner) {
+    fprintf(stderr, "Failed to initialize lexer.\n");
+    return 0;
+  }
+  int error = yyparse(scanner, &result);
+  Stellalex_destroy(scanner);
+  if (error)
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return result.expr_;
+  }
+}
+
+/* Entrypoint: parse Expr* from string. */
+Expr* psExpr5(const char *str)
+{
+  YYSTYPE result;
+  yyscan_t scanner = Stella_initialize_lexer(0);
+  if (!scanner) {
+    fprintf(stderr, "Failed to initialize lexer.\n");
+    return 0;
+  }
+  YY_BUFFER_STATE buf = Stella_scan_string(str, scanner);
+  int error = yyparse(scanner, &result);
+  Stella_delete_buffer(buf, scanner);
+  Stellalex_destroy(scanner);
+  if (error)
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return result.expr_;
+  }
+}
+
+/* Entrypoint: parse Expr* from file. */
 Expr* pExpr6(FILE *inp)
 {
   YYSTYPE result;
@@ -2443,50 +2514,6 @@ ListType* psListType(const char *str)
   { /* Success */
 std::reverse(result.listtype_->begin(), result.listtype_->end());
     return result.listtype_;
-  }
-}
-
-/* Entrypoint: parse Expr* from file. */
-Expr* pExpr5(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = Stella_initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
-  Stellalex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.expr_;
-  }
-}
-
-/* Entrypoint: parse Expr* from string. */
-Expr* psExpr5(const char *str)
-{
-  YYSTYPE result;
-  yyscan_t scanner = Stella_initialize_lexer(0);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  YY_BUFFER_STATE buf = Stella_scan_string(str, scanner);
-  int error = yyparse(scanner, &result);
-  Stella_delete_buffer(buf, scanner);
-  Stellalex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.expr_;
   }
 }
 

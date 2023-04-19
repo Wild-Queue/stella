@@ -54,6 +54,7 @@ IDENT [a-zA-Z0-9'_]
 <INITIAL>"|>"      	 return _SYMB_12;
 <INITIAL>"["      	 return _LBRACK;
 <INITIAL>"]"      	 return _RBRACK;
+<INITIAL>":="      	 return _COLONEQ;
 <INITIAL>"<"      	 return _LT;
 <INITIAL>"<="      	 return _LDARROW;
 <INITIAL>">"      	 return _GT;
@@ -65,20 +66,27 @@ IDENT [a-zA-Z0-9'_]
 <INITIAL>"*"      	 return _STAR;
 <INITIAL>"/"      	 return _SLASH;
 <INITIAL>"."      	 return _DOT;
-<INITIAL>"List::head"      	 return _SYMB_26;
-<INITIAL>"List::isempty"      	 return _SYMB_27;
-<INITIAL>"List::tail"      	 return _SYMB_28;
-<INITIAL>"Nat::pred"      	 return _SYMB_29;
-<INITIAL>"Nat::iszero"      	 return _SYMB_30;
-<INITIAL>"Nat::rec"      	 return _SYMB_31;
+<INITIAL>"List::head"      	 return _SYMB_27;
+<INITIAL>"List::isempty"      	 return _SYMB_28;
+<INITIAL>"List::tail"      	 return _SYMB_29;
+<INITIAL>"panic!"      	 return _SYMB_30;
+<INITIAL>"Nat::pred"      	 return _SYMB_31;
+<INITIAL>"Nat::iszero"      	 return _SYMB_32;
+<INITIAL>"Nat::rec"      	 return _SYMB_33;
+<INITIAL>"&"      	 return _AMP;
 <INITIAL>"Bool"      	 return _KW_Bool;
+<INITIAL>"Bot"      	 return _KW_Bot;
 <INITIAL>"Nat"      	 return _KW_Nat;
+<INITIAL>"Top"      	 return _KW_Top;
 <INITIAL>"Unit"      	 return _KW_Unit;
 <INITIAL>"and"      	 return _KW_and;
 <INITIAL>"as"      	 return _KW_as;
+<INITIAL>"cast"      	 return _KW_cast;
+<INITIAL>"catch"      	 return _KW_catch;
 <INITIAL>"cons"      	 return _KW_cons;
 <INITIAL>"core"      	 return _KW_core;
 <INITIAL>"else"      	 return _KW_else;
+<INITIAL>"exception"      	 return _KW_exception;
 <INITIAL>"extend"      	 return _KW_extend;
 <INITIAL>"false"      	 return _KW_false;
 <INITIAL>"fix"      	 return _KW_fix;
@@ -93,18 +101,22 @@ IDENT [a-zA-Z0-9'_]
 <INITIAL>"let"      	 return _KW_let;
 <INITIAL>"letrec"      	 return _KW_letrec;
 <INITIAL>"match"      	 return _KW_match;
+<INITIAL>"new"      	 return _KW_new;
 <INITIAL>"not"      	 return _KW_not;
 <INITIAL>"or"      	 return _KW_or;
 <INITIAL>"return"      	 return _KW_return;
 <INITIAL>"succ"      	 return _KW_succ;
 <INITIAL>"then"      	 return _KW_then;
+<INITIAL>"throw"      	 return _KW_throw;
 <INITIAL>"throws"      	 return _KW_throws;
 <INITIAL>"true"      	 return _KW_true;
+<INITIAL>"try"      	 return _KW_try;
 <INITIAL>"type"      	 return _KW_type;
 <INITIAL>"unfold"      	 return _KW_unfold;
 <INITIAL>"unit"      	 return _KW_unit;
+<INITIAL>"variant"      	 return _KW_variant;
 <INITIAL>"with"      	 return _KW_with;
-<INITIAL>"µ"      	 return _KW_65;
+<INITIAL>"µ"      	 return _KW_77;
 
 <INITIAL>"//"[^\n]* /* skip */; /* BNFC: comment "//" */
 <INITIAL>"/*" BEGIN COMMENT;
@@ -114,6 +126,7 @@ IDENT [a-zA-Z0-9'_]
 
 <INITIAL>(\_|{LETTER})(\!|\-|\:|\?|\_|({DIGIT}|{LETTER}))*    	 yylval->_string = strdup(yytext); return T_StellaIdent;
 <INITIAL>\#(\-|\_|({DIGIT}|{LETTER}))+    	 yylval->_string = strdup(yytext); return T_ExtensionName;
+<INITIAL>\<0x(A|B|C|D|E|F|a|b|c|d|e|f|{DIGIT})+\>    	 yylval->_string = strdup(yytext); return T_MemoryAddress;
 <INITIAL>{DIGIT}+      	 yylval->_int = atoi(yytext); return _INTEGER_;
 <INITIAL>[ \t\r\n\f]      	 /* ignore white space. */;
 <INITIAL>.      	 return _ERROR_;

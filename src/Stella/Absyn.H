@@ -20,6 +20,7 @@ typedef std::string Ident;
 
 typedef std::string StellaIdent;
 typedef std::string ExtensionName;
+typedef std::string MemoryAddress;
 
 
 /********************   Forward Declarations    ********************/
@@ -51,6 +52,8 @@ class LanguageCore;
 class AnExtension;
 class DeclFun;
 class DeclTypeAlias;
+class DeclExceptionType;
+class DeclExceptionVariant;
 class ALocalDecl;
 class InlineAnnotation;
 class AParamDecl;
@@ -81,6 +84,7 @@ class PatternVar;
 class ALabelledPattern;
 class ABinding;
 class Sequence;
+class Assign;
 class If;
 class Let;
 class LetRec;
@@ -92,6 +96,7 @@ class GreaterThanOrEqual;
 class Equal;
 class NotEqual;
 class TypeAsc;
+class TypeCast;
 class Abstraction;
 class Variant;
 class Match;
@@ -102,6 +107,8 @@ class LogicOr;
 class Multiply;
 class Divide;
 class LogicAnd;
+class Ref;
+class Deref;
 class Application;
 class DotRecord;
 class DotTuple;
@@ -111,6 +118,10 @@ class ConsList;
 class Head;
 class IsEmpty;
 class Tail;
+class Panic;
+class Throw;
+class TryCatch;
+class TryWith;
 class Inl;
 class Inr;
 class Succ;
@@ -125,6 +136,7 @@ class ConstTrue;
 class ConstFalse;
 class ConstUnit;
 class ConstInt;
+class ConstMemory;
 class Var;
 class TypeFun;
 class TypeRec;
@@ -136,6 +148,9 @@ class TypeList;
 class TypeBool;
 class TypeNat;
 class TypeUnit;
+class TypeTop;
+class TypeBottom;
+class TypeRef;
 class TypeVar;
 class AVariantFieldType;
 class ARecordFieldType;
@@ -190,6 +205,8 @@ public:
   virtual void visitAnExtension(AnExtension *p) = 0;
   virtual void visitDeclFun(DeclFun *p) = 0;
   virtual void visitDeclTypeAlias(DeclTypeAlias *p) = 0;
+  virtual void visitDeclExceptionType(DeclExceptionType *p) = 0;
+  virtual void visitDeclExceptionVariant(DeclExceptionVariant *p) = 0;
   virtual void visitALocalDecl(ALocalDecl *p) = 0;
   virtual void visitInlineAnnotation(InlineAnnotation *p) = 0;
   virtual void visitAParamDecl(AParamDecl *p) = 0;
@@ -220,6 +237,7 @@ public:
   virtual void visitALabelledPattern(ALabelledPattern *p) = 0;
   virtual void visitABinding(ABinding *p) = 0;
   virtual void visitSequence(Sequence *p) = 0;
+  virtual void visitAssign(Assign *p) = 0;
   virtual void visitIf(If *p) = 0;
   virtual void visitLet(Let *p) = 0;
   virtual void visitLetRec(LetRec *p) = 0;
@@ -231,6 +249,7 @@ public:
   virtual void visitEqual(Equal *p) = 0;
   virtual void visitNotEqual(NotEqual *p) = 0;
   virtual void visitTypeAsc(TypeAsc *p) = 0;
+  virtual void visitTypeCast(TypeCast *p) = 0;
   virtual void visitAbstraction(Abstraction *p) = 0;
   virtual void visitVariant(Variant *p) = 0;
   virtual void visitMatch(Match *p) = 0;
@@ -241,6 +260,8 @@ public:
   virtual void visitMultiply(Multiply *p) = 0;
   virtual void visitDivide(Divide *p) = 0;
   virtual void visitLogicAnd(LogicAnd *p) = 0;
+  virtual void visitRef(Ref *p) = 0;
+  virtual void visitDeref(Deref *p) = 0;
   virtual void visitApplication(Application *p) = 0;
   virtual void visitDotRecord(DotRecord *p) = 0;
   virtual void visitDotTuple(DotTuple *p) = 0;
@@ -250,6 +271,10 @@ public:
   virtual void visitHead(Head *p) = 0;
   virtual void visitIsEmpty(IsEmpty *p) = 0;
   virtual void visitTail(Tail *p) = 0;
+  virtual void visitPanic(Panic *p) = 0;
+  virtual void visitThrow(Throw *p) = 0;
+  virtual void visitTryCatch(TryCatch *p) = 0;
+  virtual void visitTryWith(TryWith *p) = 0;
   virtual void visitInl(Inl *p) = 0;
   virtual void visitInr(Inr *p) = 0;
   virtual void visitSucc(Succ *p) = 0;
@@ -264,6 +289,7 @@ public:
   virtual void visitConstFalse(ConstFalse *p) = 0;
   virtual void visitConstUnit(ConstUnit *p) = 0;
   virtual void visitConstInt(ConstInt *p) = 0;
+  virtual void visitConstMemory(ConstMemory *p) = 0;
   virtual void visitVar(Var *p) = 0;
   virtual void visitTypeFun(TypeFun *p) = 0;
   virtual void visitTypeRec(TypeRec *p) = 0;
@@ -275,6 +301,9 @@ public:
   virtual void visitTypeBool(TypeBool *p) = 0;
   virtual void visitTypeNat(TypeNat *p) = 0;
   virtual void visitTypeUnit(TypeUnit *p) = 0;
+  virtual void visitTypeTop(TypeTop *p) = 0;
+  virtual void visitTypeBottom(TypeBottom *p) = 0;
+  virtual void visitTypeRef(TypeRef *p) = 0;
   virtual void visitTypeVar(TypeVar *p) = 0;
   virtual void visitAVariantFieldType(AVariantFieldType *p) = 0;
   virtual void visitARecordFieldType(ARecordFieldType *p) = 0;
@@ -304,6 +333,7 @@ public:
   virtual void visitIdent(Ident x) = 0;
   virtual void visitStellaIdent(StellaIdent x) = 0;
   virtual void visitExtensionName(ExtensionName x) = 0;
+  virtual void visitMemoryAddress(MemoryAddress x) = 0;
 
 };
 
@@ -552,6 +582,35 @@ public:
   void swap(DeclTypeAlias &);
 };
 
+class DeclExceptionType : public Decl
+{
+public:
+  Type *type_;
+
+  DeclExceptionType(const DeclExceptionType &);
+  DeclExceptionType &operator=(const DeclExceptionType &);
+  DeclExceptionType(Type *p1);
+  ~DeclExceptionType();
+  virtual void accept(Visitor *v);
+  virtual DeclExceptionType *clone() const;
+  void swap(DeclExceptionType &);
+};
+
+class DeclExceptionVariant : public Decl
+{
+public:
+  StellaIdent stellaident_;
+  Type *type_;
+
+  DeclExceptionVariant(const DeclExceptionVariant &);
+  DeclExceptionVariant &operator=(const DeclExceptionVariant &);
+  DeclExceptionVariant(StellaIdent p1, Type *p2);
+  ~DeclExceptionVariant();
+  virtual void accept(Visitor *v);
+  virtual DeclExceptionVariant *clone() const;
+  void swap(DeclExceptionVariant &);
+};
+
 class ALocalDecl : public LocalDecl
 {
 public:
@@ -786,6 +845,46 @@ public:
   virtual void accept(Visitor *v);
   virtual TypeUnit *clone() const;
   void swap(TypeUnit &);
+};
+
+class TypeTop : public Type
+{
+public:
+
+  TypeTop(const TypeTop &);
+  TypeTop &operator=(const TypeTop &);
+  TypeTop();
+  ~TypeTop();
+  virtual void accept(Visitor *v);
+  virtual TypeTop *clone() const;
+  void swap(TypeTop &);
+};
+
+class TypeBottom : public Type
+{
+public:
+
+  TypeBottom(const TypeBottom &);
+  TypeBottom &operator=(const TypeBottom &);
+  TypeBottom();
+  ~TypeBottom();
+  virtual void accept(Visitor *v);
+  virtual TypeBottom *clone() const;
+  void swap(TypeBottom &);
+};
+
+class TypeRef : public Type
+{
+public:
+  Type *type_;
+
+  TypeRef(const TypeRef &);
+  TypeRef &operator=(const TypeRef &);
+  TypeRef(Type *p1);
+  ~TypeRef();
+  virtual void accept(Visitor *v);
+  virtual TypeRef *clone() const;
+  void swap(TypeRef &);
 };
 
 class TypeVar : public Type
@@ -1124,6 +1223,21 @@ public:
   void swap(Sequence &);
 };
 
+class Assign : public Expr
+{
+public:
+  Expr *expr_1;
+  Expr *expr_2;
+
+  Assign(const Assign &);
+  Assign &operator=(const Assign &);
+  Assign(Expr *p1, Expr *p2);
+  ~Assign();
+  virtual void accept(Visitor *v);
+  virtual Assign *clone() const;
+  void swap(Assign &);
+};
+
 class If : public Expr
 {
 public:
@@ -1275,6 +1389,21 @@ public:
   void swap(TypeAsc &);
 };
 
+class TypeCast : public Expr
+{
+public:
+  Expr *expr_;
+  Type *type_;
+
+  TypeCast(const TypeCast &);
+  TypeCast &operator=(const TypeCast &);
+  TypeCast(Expr *p1, Type *p2);
+  ~TypeCast();
+  virtual void accept(Visitor *v);
+  virtual TypeCast *clone() const;
+  void swap(TypeCast &);
+};
+
 class Abstraction : public Expr
 {
 public:
@@ -1424,6 +1553,34 @@ public:
   void swap(LogicAnd &);
 };
 
+class Ref : public Expr
+{
+public:
+  Expr *expr_;
+
+  Ref(const Ref &);
+  Ref &operator=(const Ref &);
+  Ref(Expr *p1);
+  ~Ref();
+  virtual void accept(Visitor *v);
+  virtual Ref *clone() const;
+  void swap(Ref &);
+};
+
+class Deref : public Expr
+{
+public:
+  Expr *expr_;
+
+  Deref(const Deref &);
+  Deref &operator=(const Deref &);
+  Deref(Expr *p1);
+  ~Deref();
+  virtual void accept(Visitor *v);
+  virtual Deref *clone() const;
+  void swap(Deref &);
+};
+
 class Application : public Expr
 {
 public:
@@ -1552,6 +1709,64 @@ public:
   virtual void accept(Visitor *v);
   virtual Tail *clone() const;
   void swap(Tail &);
+};
+
+class Panic : public Expr
+{
+public:
+
+  Panic(const Panic &);
+  Panic &operator=(const Panic &);
+  Panic();
+  ~Panic();
+  virtual void accept(Visitor *v);
+  virtual Panic *clone() const;
+  void swap(Panic &);
+};
+
+class Throw : public Expr
+{
+public:
+  Expr *expr_;
+
+  Throw(const Throw &);
+  Throw &operator=(const Throw &);
+  Throw(Expr *p1);
+  ~Throw();
+  virtual void accept(Visitor *v);
+  virtual Throw *clone() const;
+  void swap(Throw &);
+};
+
+class TryCatch : public Expr
+{
+public:
+  Expr *expr_1;
+  Pattern *pattern_;
+  Expr *expr_2;
+
+  TryCatch(const TryCatch &);
+  TryCatch &operator=(const TryCatch &);
+  TryCatch(Expr *p1, Pattern *p2, Expr *p3);
+  ~TryCatch();
+  virtual void accept(Visitor *v);
+  virtual TryCatch *clone() const;
+  void swap(TryCatch &);
+};
+
+class TryWith : public Expr
+{
+public:
+  Expr *expr_1;
+  Expr *expr_2;
+
+  TryWith(const TryWith &);
+  TryWith &operator=(const TryWith &);
+  TryWith(Expr *p1, Expr *p2);
+  ~TryWith();
+  virtual void accept(Visitor *v);
+  virtual TryWith *clone() const;
+  void swap(TryWith &);
 };
 
 class Inl : public Expr
@@ -1749,6 +1964,20 @@ public:
   virtual void accept(Visitor *v);
   virtual ConstInt *clone() const;
   void swap(ConstInt &);
+};
+
+class ConstMemory : public Expr
+{
+public:
+  MemoryAddress memoryaddress_;
+
+  ConstMemory(const ConstMemory &);
+  ConstMemory &operator=(const ConstMemory &);
+  ConstMemory(MemoryAddress p1);
+  ~ConstMemory();
+  virtual void accept(Visitor *v);
+  virtual ConstMemory *clone() const;
+  void swap(ConstMemory &);
 };
 
 class Var : public Expr

@@ -42,21 +42,26 @@ namespace Stella
     {
         auto showner = new ShowAbsyn();
         std::string firstTypeStr = showner->show(firstType);
-        if (firstTypeStr.size() > 8 && firstTypeStr.substr(0, 8) == "(TypeSum"){
-            TypeSum * secondTypeSum = (TypeSum*) secondType;
-            TypeSum * firstTypeSum = (TypeSum*) firstType;
+        if (firstTypeStr.size() > 8 && firstTypeStr.substr(0, 8) == "(TypeSum")
+        {
+            TypeSum *secondTypeSum = (TypeSum *)secondType;
+            TypeSum *firstTypeSum = (TypeSum *)firstType;
 
-            if (secondTypeSum->type_1 != nullptr){
+            if (secondTypeSum->type_1 != nullptr)
+            {
                 return typesumCompare(firstTypeSum->type_1, secondTypeSum->type_1);
             }
-            if (secondTypeSum->type_2 != nullptr){
+            if (secondTypeSum->type_2 != nullptr)
+            {
                 return typesumCompare(firstTypeSum->type_2, secondTypeSum->type_2);
             }
-            else{
+            else
+            {
                 return false;
             }
         }
-        else{
+        else
+        {
             return simpleCompare(firstType, secondType);
         }
     }
@@ -66,7 +71,8 @@ namespace Stella
     {
         auto showner = new ShowAbsyn();
         std::string firstTypeStr = showner->show(firstType);
-        if (firstTypeStr.size() > 8 && firstTypeStr.substr(0, 8) == "(TypeSum"){
+        if (firstTypeStr.size() > 8 && firstTypeStr.substr(0, 8) == "(TypeSum")
+        {
             return typesumCompare(firstType, secondType);
         }
         return simpleCompare(firstType, secondType);
@@ -116,7 +122,6 @@ namespace Stella
         for (auto item : this->declearedVariables)
             std::cout << item.first << " //IS OF TYPE// " << printer->print(item.second.type) << std::endl;
     }
-
     void VisitTypeCheck::visitProgram(Program *t) {}                   // abstract class
     void VisitTypeCheck::visitLanguageDecl(LanguageDecl *t) {}         // abstract class
     void VisitTypeCheck::visitExtension(Extension *t) {}               // abstract class
@@ -247,6 +252,84 @@ namespace Stella
         visitStellaIdent(decl_type_alias->stellaident_);
         if (decl_type_alias->type_)
             decl_type_alias->type_->accept(this);
+    }
+
+    void VisitTypeCheck::visitDeclExceptionType(DeclExceptionType *decl_exception_type)
+    {
+        /* Code For DeclExceptionType Goes Here */
+
+        if (decl_exception_type->type_)
+            decl_exception_type->type_->accept(this);
+    }
+
+    void VisitTypeCheck::visitDeclExceptionVariant(DeclExceptionVariant *decl_exception_variant)
+    {
+        /* Code For DeclExceptionVariant Goes Here */
+
+        visitStellaIdent(decl_exception_variant->stellaident_);
+        if (decl_exception_variant->type_)
+            decl_exception_variant->type_->accept(this);
+    }
+
+    void VisitTypeCheck::visitAssign(Assign *assign)
+    {
+        /* Code For Assign Goes Here */
+
+        if (assign->expr_1)
+            assign->expr_1->accept(this);
+        if (assign->expr_2)
+            assign->expr_2->accept(this);
+    }
+
+    void VisitTypeCheck::visitRef(Ref *ref)
+    {
+        /* Code For Ref Goes Here */
+
+        if (ref->expr_)
+            ref->expr_->accept(this);
+    }
+
+    void VisitTypeCheck::visitDeref(Deref *deref)
+    {
+        /* Code For Deref Goes Here */
+
+        if (deref->expr_)
+            deref->expr_->accept(this);
+    }
+
+    void VisitTypeCheck::visitPanic(Panic *panic)
+    {
+        /* Code For Panic Goes Here */
+    }
+
+    void VisitTypeCheck::visitThrow(Throw *throw_)
+    {
+        /* Code For Throw Goes Here */
+
+        if (throw_->expr_)
+            throw_->expr_->accept(this);
+    }
+
+    void VisitTypeCheck::visitTryCatch(TryCatch *try_catch)
+    {
+        /* Code For TryCatch Goes Here */
+
+        if (try_catch->expr_1)
+            try_catch->expr_1->accept(this);
+        if (try_catch->pattern_)
+            try_catch->pattern_->accept(this);
+        if (try_catch->expr_2)
+            try_catch->expr_2->accept(this);
+    }
+
+    void VisitTypeCheck::visitTryWith(TryWith *try_with)
+    {
+        /* Code For TryWith Goes Here */
+
+        if (try_with->expr_1)
+            try_with->expr_1->accept(this);
+        if (try_with->expr_2)
+            try_with->expr_2->accept(this);
     }
 
     void VisitTypeCheck::visitALocalDecl(ALocalDecl *a_local_decl)
@@ -409,6 +492,24 @@ namespace Stella
     {
         /* Code For TypeUnit Goes Here */
         this->setLastReturn(new TypeUnit());
+    }
+
+    void VisitTypeCheck::visitTypeTop(TypeTop *type_top)
+    {
+        /* Code For TypeTop Goes Here */
+    }
+
+    void VisitTypeCheck::visitTypeBottom(TypeBottom *type_bottom)
+    {
+        /* Code For TypeBottom Goes Here */
+    }
+
+    void VisitTypeCheck::visitTypeRef(TypeRef *type_ref)
+    {
+        /* Code For TypeRef Goes Here */
+
+        if (type_ref->type_)
+            type_ref->type_->accept(this);
     }
 
     void VisitTypeCheck::visitTypeVar(TypeVar *type_var)
@@ -785,6 +886,7 @@ namespace Stella
         }
     }
 
+
     void VisitTypeCheck::visitGreaterThanOrEqual(GreaterThanOrEqual *greater_than_or_equal)
     {
         /* Code For GreaterThanOrEqual Goes Here */
@@ -859,6 +961,16 @@ namespace Stella
             type_asc->expr_->accept(this);
         if (type_asc->type_)
             type_asc->type_->accept(this);
+    }
+
+    void VisitTypeCheck::visitTypeCast(TypeCast *type_cast)
+    {
+        /* Code For TypeCast Goes Here */
+
+        if (type_cast->expr_)
+            type_cast->expr_->accept(this);
+        if (type_cast->type_)
+            type_cast->type_->accept(this);
     }
 
     void VisitTypeCheck::visitAbstraction(Abstraction *abstraction)
@@ -1446,6 +1558,13 @@ namespace Stella
         this->lastReturn = new TypeNat();
     }
 
+    void VisitTypeCheck::visitConstMemory(ConstMemory *const_memory)
+    {
+        /* Code For ConstMemory Goes Here */
+
+        visitMemoryAddress(const_memory->memoryaddress_);
+    }
+
     void VisitTypeCheck::visitVar(Var *var)
     {
         /* Code For Var Goes Here */
@@ -1681,6 +1800,11 @@ namespace Stella
     void VisitTypeCheck::visitExtensionName(ExtensionName x)
     {
         /* Code for ExtensionName Goes Here */
+    }
+
+    void VisitTypeCheck::visitMemoryAddress(MemoryAddress x)
+    {
+        /* Code for MemoryAddress Goes Here */
     }
 
 }
