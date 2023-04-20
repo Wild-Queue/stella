@@ -113,6 +113,18 @@ add_test(NAME bad-if-2_extended_tests COMMAND stella-interpreter typecheck ../te
 add_test(NAME shadowed-variable-1_extended_tests COMMAND stella-interpreter typecheck ../tests/extended_tests/ill-typed/shadowed-variable-1.stella)
 add_test(NAME bad-cmp-5 COMMAND stella-interpreter typecheck ../tests/extended_tests/ill-typed/bad-cmp-5.stella)
 add_test(NAME bad-logic-and-1 COMMAND stella-interpreter typecheck ../tests/extended_tests/ill-typed/bad-logic-and-1.stella)
+add_test(NAME bad-records-1 COMMAND stella-interpreter typecheck ../tests/records/ill-typed/bad-records-1.stella)
+add_test(NAME bad-refs-1 COMMAND stella-interpreter typecheck ../tests/references/ill-typed/bad-refs-1.stella)
+add_test(NAME bad-refs-2 COMMAND stella-interpreter typecheck ../tests/references/ill-typed/bad-refs-2.stella)
+add_test(NAME bad-refs-3 COMMAND stella-interpreter typecheck ../tests/references/ill-typed/bad-refs-3.stella)
+
+add_test(NAME bad-subtyping-1 COMMAND stella-interpreter typecheck ../tests/subtyping/ill-typed/bad-subtyping-1.stella)
+add_test(NAME bad-subtyping-2 COMMAND stella-interpreter typecheck ../tests/subtyping/ill-typed/bad-subtyping-2.stella)
+add_test(NAME bad-subtyping-3 COMMAND stella-interpreter typecheck ../tests/subtyping/ill-typed/bad-subtyping-3.stella)
+add_test(NAME bad-subtyping-4 COMMAND stella-interpreter typecheck ../tests/subtyping/ill-typed/bad-subtyping-4.stella)
+add_test(NAME bad-subtyping-5 COMMAND stella-interpreter typecheck ../tests/subtyping/ill-typed/bad-subtyping-5.stella)
+
+add_test(NAME bad-panic-1 COMMAND stella-interpreter typecheck ../tests/exceptions/ill-typed/bad-panic-1.stella)
 
 set_tests_properties(
   bad-nat-1
@@ -172,6 +184,17 @@ set_tests_properties(
   shadowed-variable-1_extended_tests
   bad-cmp-5
   bad-logic-and-1
+  bad-records-1
+  bad-refs-1
+  bad-refs-2
+  bad-refs-3
+  bad-subtyping-1
+  bad-subtyping-2
+  bad-subtyping-3
+  bad-subtyping-4
+  bad-subtyping-5
+
+  bad-panic-1
   PROPERTIES WILL_FAIL TRUE)
 
 set_tests_properties(
@@ -238,3 +261,21 @@ add_test(NAME added-test-2_extended_tests COMMAND stella-interpreter typecheck .
 add_test(NAME bool-to-nat COMMAND stella-interpreter typecheck ../tests/extended_tests/well-typed/bool-to-nat.stella)
 add_test(NAME good-succ-1 COMMAND stella-interpreter typecheck ../tests/extended_tests/well-typed/good-succ-1.stella)
 add_test(NAME higher-order-1_extended_tests COMMAND stella-interpreter typecheck ../tests/extended_tests/well-typed/higher-order-1.stella)
+add_test(NAME records-1 COMMAND stella-interpreter typecheck ../tests/records/well-typed/records-1.stella)
+add_test(NAME refs-1 COMMAND stella-interpreter typecheck ../tests/references/well-typed/refs-1.stella)
+add_test(NAME refs-2 COMMAND stella-interpreter typecheck ../tests/references/well-typed/refs-2.stella)
+add_test(NAME refs-3 COMMAND stella-interpreter typecheck ../tests/references/well-typed/refs-3.stella)
+add_test(NAME refs-4 COMMAND stella-interpreter typecheck ../tests/references/well-typed/refs-4.stella)
+
+add_test(NAME subtyping-1 COMMAND stella-interpreter typecheck ../tests/subtyping/well-typed/subtyping-1.stella)
+add_test(NAME subtyping-2 COMMAND stella-interpreter typecheck ../tests/subtyping/well-typed/subtyping-2.stella)
+add_test(NAME subtyping-3 COMMAND stella-interpreter typecheck ../tests/subtyping/well-typed/subtyping-3.stella)
+add_test(NAME subtyping-4 COMMAND stella-interpreter typecheck ../tests/subtyping/well-typed/subtyping-4.stella)
+add_test(NAME subtyping-5 COMMAND stella-interpreter typecheck ../tests/subtyping/well-typed/subtyping-5.stella)
+add_test(NAME subtyping-6 COMMAND stella-interpreter typecheck ../tests/subtyping/well-typed/subtyping-6.stella)
+add_test(NAME subtyping-7 COMMAND stella-interpreter typecheck ../tests/subtyping/well-typed/subtyping-7.stella)
+add_test(NAME subtyping-8 COMMAND stella-interpreter typecheck ../tests/subtyping/well-typed/subtyping-8.stella)
+
+add_test(NAME panic-1 COMMAND stella-interpreter typecheck ../tests/exceptions/well-typed/panic-1.stella)
+add_test(NAME panic-2 COMMAND stella-interpreter typecheck ../tests/exceptions/well-typed/panic-2.stella)
+add_test(NAME panic-3 COMMAND stella-interpreter typecheck ../tests/exceptions/well-typed/panic-3.stella)

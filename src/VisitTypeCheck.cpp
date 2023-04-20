@@ -47,35 +47,130 @@ namespace Stella
             TypeSum *secondTypeSum = (TypeSum *)secondType;
             TypeSum *firstTypeSum = (TypeSum *)firstType;
 
-            if (secondTypeSum->type_1 != nullptr)
-            {
+            if (simpleCompare(secondTypeSum->type_2, new TypeBottom()) == false && simpleCompare(secondTypeSum->type_1, new TypeBottom()) == false)
+                return (typesumCompare(firstTypeSum->type_1, secondTypeSum->type_1) &&
+                        typesumCompare(firstTypeSum->type_2, secondTypeSum->type_2));
+
+            if (simpleCompare(secondTypeSum->type_1, new TypeBottom()) == false)
                 return typesumCompare(firstTypeSum->type_1, secondTypeSum->type_1);
-            }
-            if (secondTypeSum->type_2 != nullptr)
-            {
+
+            if (simpleCompare(secondTypeSum->type_2, new TypeBottom()) == false)
                 return typesumCompare(firstTypeSum->type_2, secondTypeSum->type_2);
-            }
-            else
-            {
+
+            if (simpleCompare(secondTypeSum->type_2, new TypeBottom()) && simpleCompare(secondTypeSum->type_1, new TypeBottom()))
                 return false;
-            }
+            return false;
         }
         else
         {
             return simpleCompare(firstType, secondType);
         }
-    }
+    };
 
-    // Function to check if to Types are equal
-    bool compareTypes(Type *firstType, Type *secondType)
+    bool compareTypes(Type *subType, Type *superType);
+
+    // Добавить в Record проверку что имена параметров различные
+    bool typerecordCompare(Type *subType, Type *superType)
     {
         auto showner = new ShowAbsyn();
-        std::string firstTypeStr = showner->show(firstType);
-        if (firstTypeStr.size() > 8 && firstTypeStr.substr(0, 8) == "(TypeSum")
+        std::string subTypeStr = showner->show(subType);
+        std::string superTypeStr = showner->show(superType);
+        if (subTypeStr.size() > 11 && subTypeStr.substr(0, 11) == "(TypeRecord" &&
+            superTypeStr.size() > 11 && superTypeStr.substr(0, 11) == "(TypeRecord")
         {
-            return typesumCompare(firstType, secondType);
+            TypeRecord *subTypeRecord = (TypeRecord *)subType;
+            TypeRecord *superTypeRecord = (TypeRecord *)superType;
+
+            bool ifSubType = true;
+            for (ListRecordFieldType::iterator i = superTypeRecord->listrecordfieldtype_->begin(); i != superTypeRecord->listrecordfieldtype_->end(); ++i)
+            {
+                ARecordFieldType *AFTi = (ARecordFieldType *)(*i);
+                bool entered = false;
+
+                for (ListRecordFieldType::iterator j = subTypeRecord->listrecordfieldtype_->begin(); j != subTypeRecord->listrecordfieldtype_->end(); ++j)
+                {
+                    ARecordFieldType *AFTj = (ARecordFieldType *)(*j);
+                    // i - parameter of superType
+                    // j - parameter of subType
+
+                    if (AFTj->stellaident_ == AFTi->stellaident_ && compareTypes(AFTj->type_, AFTi->type_) == false)
+                        ifSubType = false;
+
+                    if (AFTj->stellaident_ == AFTi->stellaident_)
+                        entered = true;
+                }
+                if (entered == false)
+                    ifSubType = false;
+            }
+
+            return ifSubType;
         }
-        return simpleCompare(firstType, secondType);
+        else
+            return false;
+    }
+
+    bool typefunCompare(Type *subType, Type *superType)
+    {
+        auto showner = new ShowAbsyn();
+        std::string subTypeStr = showner->show(subType);
+        std::string superTypeStr = showner->show(superType);
+        if (subTypeStr.size() > 8 && subTypeStr.substr(0, 8) == "(TypeFun" &&
+            superTypeStr.size() > 8 && superTypeStr.substr(0, 8) == "(TypeFun")
+        {
+            TypeFun *subTypeFun = (TypeFun *)subType;
+            TypeFun *superTypeFun = (TypeFun *)superType;
+
+            bool ifSubType = true;
+            ListType::iterator j = subTypeFun->listtype_->begin();
+            for (ListType::iterator i = superTypeFun->listtype_->begin();
+                 i != superTypeFun->listtype_->end() && j < subTypeFun->listtype_->end(); ++i, ++j)
+            {
+                // i - parameter of superType
+                // j - parameter of subType
+                if (compareTypes((*i), (*j)) == false)
+                {
+                    ifSubType = false;
+                }
+            }
+
+            return (compareTypes(subTypeFun->type_, superTypeFun->type_) && ifSubType);
+        }
+        else
+            return false;
+    };
+
+    // Function to check if to Types are equal
+    bool compareTypes(Type *subType, Type *superType)
+    {
+        auto showner = new ShowAbsyn();
+        std::string subTypeStr = showner->show(subType);
+        std::string superTypeStr = showner->show(superType);
+        if (subTypeStr == showner->show(new TypeBottom()) || superTypeStr == showner->show(new TypeTop()))
+            return true;
+
+        if (subTypeStr == showner->show(new TypeTop()) || superTypeStr == showner->show(new TypeBottom()))
+            return false;
+
+        if (subTypeStr.size() > 8 && subTypeStr.substr(0, 8) == "(TypeSum")
+        {
+            std::string botStr = showner->show(new TypeBottom());
+            if (subTypeStr.find(botStr) != std::string::npos)
+                return typesumCompare(superType, subType);
+            else
+                return typesumCompare(subType, superType);
+        }
+        if (subTypeStr.size() > 8 && subTypeStr.substr(0, 8) == "(TypeFun")
+        {
+            return typefunCompare(subType, superType);
+        }
+        if (subTypeStr.size() > 11 && subTypeStr.substr(0, 11) == "(TypeRecord")
+        {
+            std::cout << "TypeRecord :\n SubType:" << subTypeStr << "\n SuperType:" << superTypeStr << std::endl;
+            std::cout << typerecordCompare(subType, superType) << std::endl;
+            return typerecordCompare(subType, superType);
+        }
+
+        return simpleCompare(subType, superType);
     }
 
     // Get textual representation of the Visitable node
@@ -110,6 +205,17 @@ namespace Stella
             return true;
         else
             return false;
+    }
+
+    void nullptrCheck(Type *someType, int line_number, int char_number)
+    {
+        if (someType == nullptr)
+        {
+            std::cout << "Error: expression is not specified" << std::endl
+                      << "On the line: " << line_number << std::endl
+                      << "Character number: " << char_number << std::endl;
+            exit(1);
+        }
     }
 
     // Print collected variable's declarations
@@ -211,7 +317,7 @@ namespace Stella
         Type *expr_Type = this->getLastReturn();
 
         // Check if there is return type
-        if (showner->show(decl_fun->returntype_) == "NoReturnType")
+        if ((std::string)showner->show(decl_fun->returntype_) == "NoReturnType")
         {
             std::cout << "Error: no return type in the function " << std::endl
                       << "Function name: " << decl_fun->stellaident_ << std::endl;
@@ -219,16 +325,10 @@ namespace Stella
         }
 
         // Check if the return expression is correctly handled
-        if (expr_Type == nullptr)
-        {
-            std::cout << "Error: return expression is not specified" << std::endl
-                      << "Function name: " << decl_fun->stellaident_ << std::endl
-                      << "On the line: " << decl_fun->expr_->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_Type, decl_fun->expr_->line_number, decl_fun->expr_->char_number);
 
         // Check if the return expression is of function retur type
-        if (compareTypes(returntype_Type, expr_Type) == false)
+        if (compareTypes(expr_Type, returntype_Type) == false)
         {
             std::cout << "Error: incorrect return expression type in function \"" << decl_fun->stellaident_ << '"' << std::endl
                       << "Expected: " << showner->show(returntype_Type) << std::endl
@@ -277,8 +377,20 @@ namespace Stella
 
         if (assign->expr_1)
             assign->expr_1->accept(this);
+        Type *expr_1Type = this->getLastReturn();
         if (assign->expr_2)
             assign->expr_2->accept(this);
+        Type *expr_2Type = this->getLastReturn();
+
+        if (compareTypes(expr_1Type, new TypeRef(expr_2Type)) == false)
+        {
+            std::cout << "Error: incorect types in the assignment statement" << std::endl
+                      << "Left: " << showner->show(expr_1Type) << std::endl
+                      << "Right: " << showner->show(expr_2Type) << std::endl;
+            exit(1);
+        }
+
+        this->setLastReturn(new TypeUnit());
     }
 
     void VisitTypeCheck::visitRef(Ref *ref)
@@ -287,6 +399,9 @@ namespace Stella
 
         if (ref->expr_)
             ref->expr_->accept(this);
+        Type *expr_Type = this->getLastReturn();
+
+        this->setLastReturn(new TypeRef(expr_Type));
     }
 
     void VisitTypeCheck::visitDeref(Deref *deref)
@@ -295,11 +410,22 @@ namespace Stella
 
         if (deref->expr_)
             deref->expr_->accept(this);
+        TypeRef *expr_Type = (TypeRef *)this->getLastReturn();
+        if (expr_Type->type_ == nullptr)
+        {
+            std::cout << "Error: incorrect dereferencing" << std::endl
+                      << "On the line: " << deref->line_number << std::endl
+                      << "Character number: " << deref->char_number << std::endl;
+            exit(1);
+        }
+
+        this->setLastReturn(expr_Type->type_);
     }
 
     void VisitTypeCheck::visitPanic(Panic *panic)
     {
         /* Code For Panic Goes Here */
+        this->setLastReturn(new TypeBottom());
     }
 
     void VisitTypeCheck::visitThrow(Throw *throw_)
@@ -401,12 +527,7 @@ namespace Stella
         Type *expr_Type = this->getLastReturn();
 
         // Check if the function name is handled correctly
-        if (expr_Type == nullptr)
-        {
-            std::cout << "Error: function type is not specified" << std::endl
-                      << "On the line: " << type_fun->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_Type, type_fun->line_number, type_fun->char_number);
 
         TypeFun *FunctionType = CombineFun(listparamdeclCopy, expr_Type);
 
@@ -455,9 +576,10 @@ namespace Stella
     void VisitTypeCheck::visitTypeRecord(TypeRecord *type_record)
     {
         /* Code For TypeRecord Goes Here */
-
         if (type_record->listrecordfieldtype_)
             type_record->listrecordfieldtype_->accept(this);
+
+        this->setLastReturn(type_record);
     }
 
     void VisitTypeCheck::visitTypeVariant(TypeVariant *type_variant)
@@ -497,11 +619,13 @@ namespace Stella
     void VisitTypeCheck::visitTypeTop(TypeTop *type_top)
     {
         /* Code For TypeTop Goes Here */
+        this->setLastReturn(new TypeTop());
     }
 
     void VisitTypeCheck::visitTypeBottom(TypeBottom *type_bottom)
     {
         /* Code For TypeBottom Goes Here */
+        this->setLastReturn(new TypeBottom());
     }
 
     void VisitTypeCheck::visitTypeRef(TypeRef *type_ref)
@@ -510,6 +634,8 @@ namespace Stella
 
         if (type_ref->type_)
             type_ref->type_->accept(this);
+
+        this->setLastReturn(type_ref);
     }
 
     void VisitTypeCheck::visitTypeVar(TypeVar *type_var)
@@ -537,12 +663,7 @@ namespace Stella
             a_match_case->expr_->accept(this);
         Type *expr_Type = this->getLastReturn();
 
-        if (expr_Type == nullptr)
-        {
-            std::cout << "Error: no expression type in the match" << std::endl
-                      << "On the line: " << a_match_case->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_Type, a_match_case->expr_->line_number, a_match_case->expr_->char_number);
 
         // Clearning from infunction declaration
         this->declearedVariables.clear();
@@ -602,6 +723,14 @@ namespace Stella
     {
         /* Code For PatternInl Goes Here */
         TypeSum *input = (TypeSum *)this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern inl" << std::endl
+                      << "On the line: " << pattern_inl->line_number << std::endl
+                      << "Character number" << pattern_inl->char_number << std::endl;
+            exit(1);
+        }
+
         if (input->type_1 == nullptr)
         {
             std::cout << "Error: incorrect parameters in the match" << std::endl;
@@ -619,6 +748,14 @@ namespace Stella
     {
         /* Code For PatternInr Goes Here */
         TypeSum *input = (TypeSum *)this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern inr" << std::endl
+                      << "On the line: " << pattern_inr->line_number << std::endl
+                      << "Character number" << pattern_inr->char_number << std::endl;
+            exit(1);
+        }
+
         if (input->type_2 == nullptr)
         {
             std::cout << "Error: incorrect parameters in the match" << std::endl;
@@ -626,7 +763,7 @@ namespace Stella
                       << "But got: " << showner->show(pattern_inr) << std::endl;
             exit(1);
         }
-        
+
         this->setInType(input->type_2);
         if (pattern_inr->pattern_)
             pattern_inr->pattern_->accept(this);
@@ -635,6 +772,22 @@ namespace Stella
     void VisitTypeCheck::visitPatternTuple(PatternTuple *pattern_tuple)
     {
         /* Code For PatternTuple Goes Here */
+        TypeTuple *input = (TypeTuple *)this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern tuple" << std::endl
+                      << "On the line: " << pattern_tuple->line_number << std::endl
+                      << "Character number" << pattern_tuple->char_number << std::endl;
+            exit(1);
+        }
+
+        if (input->listtype_ == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the tuple" << std::endl;
+            std::cout << "Expected: " << showner->show(this->getInType()) << std::endl
+                      << "But got: " << showner->show(pattern_tuple) << std::endl;
+            exit(1);
+        }
 
         if (pattern_tuple->listpattern_)
             pattern_tuple->listpattern_->accept(this);
@@ -643,6 +796,22 @@ namespace Stella
     void VisitTypeCheck::visitPatternRecord(PatternRecord *pattern_record)
     {
         /* Code For PatternRecord Goes Here */
+        TypeRecord *input = (TypeRecord *)this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern record" << std::endl
+                      << "On the line: " << pattern_record->line_number << std::endl
+                      << "Character number" << pattern_record->char_number << std::endl;
+            exit(1);
+        }
+
+        if (input->listrecordfieldtype_ == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the tuple" << std::endl;
+            std::cout << "Expected: " << showner->show(this->getInType()) << std::endl
+                      << "But got: " << showner->show(pattern_record) << std::endl;
+            exit(1);
+        }
 
         if (pattern_record->listlabelledpattern_)
             pattern_record->listlabelledpattern_->accept(this);
@@ -669,21 +838,85 @@ namespace Stella
     void VisitTypeCheck::visitPatternFalse(PatternFalse *pattern_false)
     {
         /* Code For PatternFalse Goes Here */
+        Type *input = this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern false" << std::endl
+                      << "On the line: " << pattern_false->line_number << std::endl
+                      << "Character number" << pattern_false->char_number << std::endl;
+            exit(1);
+        }
+
+        if (compareTypes(input, new TypeBool()) == false)
+        {
+            std::cout << "Error: incorrect parameters in the match" << std::endl;
+            std::cout << "Expected: " << showner->show(input) << std::endl
+                      << "But got: " << showner->show(new TypeBool()) << std::endl;
+            exit(1);
+        }
     }
 
     void VisitTypeCheck::visitPatternTrue(PatternTrue *pattern_true)
     {
         /* Code For PatternTrue Goes Here */
+        Type *input = this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern true" << std::endl
+                      << "On the line: " << pattern_true->line_number << std::endl
+                      << "Character number" << pattern_true->char_number << std::endl;
+            exit(1);
+        }
+
+        if (compareTypes(input, new TypeBool()) == false)
+        {
+            std::cout << "Error: incorrect parameters in the match" << std::endl;
+            std::cout << "Expected: " << showner->show(input) << std::endl
+                      << "But got: " << showner->show(new TypeBool()) << std::endl;
+            exit(1);
+        }
     }
 
     void VisitTypeCheck::visitPatternUnit(PatternUnit *pattern_unit)
     {
         /* Code For PatternUnit Goes Here */
+        Type *input = this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern unit" << std::endl
+                      << "On the line: " << pattern_unit->line_number << std::endl
+                      << "Character number" << pattern_unit->char_number << std::endl;
+            exit(1);
+        }
+
+        if (compareTypes(input, new TypeUnit()) == false)
+        {
+            std::cout << "Error: incorrect parameters in the match" << std::endl;
+            std::cout << "Expected: " << showner->show(input) << std::endl
+                      << "But got: " << showner->show(new TypeUnit()) << std::endl;
+            exit(1);
+        }
     }
 
     void VisitTypeCheck::visitPatternInt(PatternInt *pattern_int)
     {
         /* Code For PatternInt Goes Here */
+        Type *input = this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern int" << std::endl
+                      << "On the line: " << pattern_int->line_number << std::endl
+                      << "Character number" << pattern_int->char_number << std::endl;
+            exit(1);
+        }
+
+        if (compareTypes(input, new TypeNat()) == false)
+        {
+            std::cout << "Error: incorrect parameters in the match" << std::endl;
+            std::cout << "Expected: " << showner->show(input) << std::endl
+                      << "But got: " << showner->show(new TypeNat()) << std::endl;
+            exit(1);
+        }
 
         visitInteger(pattern_int->integer_);
     }
@@ -691,6 +924,22 @@ namespace Stella
     void VisitTypeCheck::visitPatternSucc(PatternSucc *pattern_succ)
     {
         /* Code For PatternSucc Goes Here */
+        Type *input = this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern succ" << std::endl
+                      << "On the line: " << pattern_succ->line_number << std::endl
+                      << "Character number" << pattern_succ->char_number << std::endl;
+            exit(1);
+        }
+
+        if (compareTypes(input, new TypeNat()) == false)
+        {
+            std::cout << "Error: incorrect parameters in the match" << std::endl;
+            std::cout << "Expected: " << showner->show(input) << std::endl
+                      << "But got: " << showner->show(new TypeNat()) << std::endl;
+            exit(1);
+        }
 
         if (pattern_succ->pattern_)
             pattern_succ->pattern_->accept(this);
@@ -702,20 +951,43 @@ namespace Stella
         Type *input = this->getInType();
         if (input == nullptr)
         {
-            std::cout << "Error: incorrect parameters in the match" << std::endl;
-            std::cout << "Expected: " << " " << std::endl
-                      << "But got: " << showner->show(pattern_var) << std::endl;
+            std::cout << "Error: incorrect parameters in the pattern var" << std::endl
+                      << "On the line: " << pattern_var->line_number << std::endl
+                      << "Character number" << pattern_var->char_number << std::endl;
             exit(1);
         }
 
         visitStellaIdent(pattern_var->stellaident_);
-        this->addVariableDecl(pattern_var->stellaident_, input, 0);
+
+        if (this->declearedVariables.count(pattern_var->stellaident_) == 0)
+        {
+            this->addVariableDecl(pattern_var->stellaident_, input, 0);
+        }
+        else
+        {
+            if (compareTypes(this->declearedVariables[pattern_var->stellaident_].type, input) == false)
+            {
+                std::cout << "Error: incorrect parameters in the match" << std::endl;
+                std::cout << "Expected: " << showner->show(input) << std::endl
+                          << "But got: " << showner->show(this->declearedVariables[pattern_var->stellaident_].type) << std::endl;
+                exit(1);
+            }
+        }
     }
 
     void VisitTypeCheck::visitALabelledPattern(ALabelledPattern *a_labelled_pattern)
     {
         /* Code For ALabelledPattern Goes Here */
+        Type *input = this->getInType();
+        if (input == nullptr)
+        {
+            std::cout << "Error: incorrect parameters in the pattern record" << std::endl
+                      << "On the line: " << a_labelled_pattern->line_number << std::endl
+                      << "Character number" << a_labelled_pattern->char_number << std::endl;
+            exit(1);
+        }
 
+        this->setInType(input);
         visitStellaIdent(a_labelled_pattern->stellaident_);
         if (a_labelled_pattern->pattern_)
             a_labelled_pattern->pattern_->accept(this);
@@ -728,6 +1000,12 @@ namespace Stella
         visitStellaIdent(a_binding->stellaident_);
         if (a_binding->expr_)
             a_binding->expr_->accept(this);
+        Type *expr_Type = this->getLastReturn();
+
+        nullptrCheck(expr_Type, a_binding->expr_->line_number, a_binding->expr_->char_number);
+
+        // Return binding type
+        this->setLastReturn(expr_Type);
     }
 
     void VisitTypeCheck::visitSequence(Sequence *sequence)
@@ -736,8 +1014,26 @@ namespace Stella
 
         if (sequence->expr_1)
             sequence->expr_1->accept(this);
+        Type *expr_1Type = this->getLastReturn();
+
+        nullptrCheck(expr_1Type, sequence->expr_1->line_number, sequence->expr_1->char_number);
+
+        if (compareTypes(expr_1Type, new TypeUnit()) == false)
+        {
+            std::cout << "Error: incorrect parameters in the match" << std::endl;
+            std::cout << "Expected: " << showner->show(new TypeUnit()) << std::endl
+                      << "But got: " << showner->show(expr_1Type) << std::endl;
+            exit(1);
+        }
+
         if (sequence->expr_2)
             sequence->expr_2->accept(this);
+        Type *expr_2Type = this->getLastReturn();
+
+        nullptrCheck(expr_2Type, sequence->expr_2->line_number, sequence->expr_2->char_number);
+
+        // Return sequence type
+        this->setLastReturn(expr_2Type);
     }
 
     void VisitTypeCheck::visitIf(If *if_)
@@ -757,24 +1053,9 @@ namespace Stella
         Type *expr_3Type = this->getLastReturn();
 
         // Types Check
-        if (expr_1Type == nullptr)
-        {
-            std::cout << "Error: condition statement is not specified" << std::endl
-                      << "On the line: " << if_->line_number << std::endl;
-            exit(1);
-        }
-        if (expr_2Type == nullptr)
-        {
-            std::cout << "Error: then statement is not specified" << std::endl
-                      << "On the line: " << if_->line_number << std::endl;
-            exit(1);
-        }
-        if (expr_3Type == nullptr)
-        {
-            std::cout << "Error: else statement is not specified" << std::endl
-                      << "On the line: " << if_->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_1Type, if_->expr_1->line_number, if_->expr_1->char_number);
+        nullptrCheck(expr_2Type, if_->expr_2->line_number, if_->expr_2->char_number);
+        nullptrCheck(expr_3Type, if_->expr_3->line_number, if_->expr_3->char_number);
 
         // Condition type Check
         if (compareTypes(expr_1Type, new TypeBool()) == false)
@@ -787,13 +1068,18 @@ namespace Stella
         }
 
         // Statements types Check
-        if (compareTypes(expr_2Type, expr_3Type) == false)
+        if (compareTypes(expr_2Type, expr_3Type) == false && compareTypes(expr_3Type, expr_2Type) == false)
         {
             std::cout << "Error: different types of statements in the if statement: " << std::endl
                       << '"' << getNodeID(if_->expr_2) << "\" type is: " << showner->show(expr_2Type) << std::endl
                       << '"' << getNodeID(if_->expr_3) << "\" type is: " << showner->show(expr_3Type) << std::endl
                       << "On the line: " << if_->line_number << std::endl;
             exit(1);
+        }
+
+        if (compareTypes(expr_2Type, new TypeBottom()) == false)
+        {
+            expr_2Type = expr_3Type;
         }
 
         // Return if_ type
@@ -832,14 +1118,16 @@ namespace Stella
             less_than->expr_2->accept(this);
         Type *expr_2Type = this->getLastReturn();
 
-        if (compareTypes(expr_1Type, expr_2Type) == false)
+        if (compareTypes(expr_1Type, expr_2Type) == false && compareTypes(expr_2Type, expr_1Type) == false)
         {
             std::cout << "Error: different types in the if condition: " << std::endl
-                       << getNodeID(less_than->expr_1) << std::endl
-                       << getNodeID(less_than->expr_2) << std::endl
+                      << getNodeID(less_than->expr_1) << std::endl
+                      << getNodeID(less_than->expr_2) << std::endl
                       << "On the line: " << less_than->line_number << std::endl;
             exit(1);
         }
+
+        this->setLastReturn(new TypeBool());
     }
 
     void VisitTypeCheck::visitLessThanOrEqual(LessThanOrEqual *less_than_or_equal)
@@ -854,14 +1142,16 @@ namespace Stella
             less_than_or_equal->expr_2->accept(this);
         Type *expr_2Type = this->getLastReturn();
 
-        if (compareTypes(expr_1Type, expr_2Type) == false)
+        if (compareTypes(expr_1Type, expr_2Type) == false && compareTypes(expr_2Type, expr_1Type) == false)
         {
             std::cout << "Error: different types in the if condition: " << std::endl
-                       << getNodeID(less_than_or_equal->expr_1) << std::endl
-                       << getNodeID(less_than_or_equal->expr_2) << std::endl
+                      << getNodeID(less_than_or_equal->expr_1) << std::endl
+                      << getNodeID(less_than_or_equal->expr_2) << std::endl
                       << "On the line: " << less_than_or_equal->line_number << std::endl;
             exit(1);
         }
+
+        this->setLastReturn(new TypeBool());
     }
 
     void VisitTypeCheck::visitGreaterThan(GreaterThan *greater_than)
@@ -876,16 +1166,17 @@ namespace Stella
             greater_than->expr_2->accept(this);
         Type *expr_2Type = this->getLastReturn();
 
-        if (compareTypes(expr_1Type, expr_2Type) == false)
+        if (compareTypes(expr_1Type, expr_2Type) == false && compareTypes(expr_2Type, expr_1Type) == false)
         {
             std::cout << "Error: different types in the if condition: " << std::endl
-                       << getNodeID(greater_than->expr_1) << std::endl
-                       << getNodeID(greater_than->expr_2) << std::endl
+                      << getNodeID(greater_than->expr_1) << std::endl
+                      << getNodeID(greater_than->expr_2) << std::endl
                       << "On the line: " << greater_than->line_number << std::endl;
             exit(1);
         }
-    }
 
+        this->setLastReturn(new TypeBool());
+    }
 
     void VisitTypeCheck::visitGreaterThanOrEqual(GreaterThanOrEqual *greater_than_or_equal)
     {
@@ -899,14 +1190,16 @@ namespace Stella
             greater_than_or_equal->expr_2->accept(this);
         Type *expr_2Type = this->getLastReturn();
 
-        if (compareTypes(expr_1Type, expr_2Type) == false)
+        if (compareTypes(expr_1Type, expr_2Type) == false && compareTypes(expr_2Type, expr_1Type) == false)
         {
             std::cout << "Error: different types in the if condition: " << std::endl
-                       << getNodeID(greater_than_or_equal->expr_1) << std::endl
-                       << getNodeID(greater_than_or_equal->expr_2) << std::endl
+                      << getNodeID(greater_than_or_equal->expr_1) << std::endl
+                      << getNodeID(greater_than_or_equal->expr_2) << std::endl
                       << "On the line: " << greater_than_or_equal->line_number << std::endl;
             exit(1);
         }
+
+        this->setLastReturn(new TypeBool());
     }
 
     void VisitTypeCheck::visitEqual(Equal *equal)
@@ -921,14 +1214,16 @@ namespace Stella
             equal->expr_2->accept(this);
         Type *expr_2Type = this->getLastReturn();
 
-        if (compareTypes(expr_1Type, expr_2Type) == false)
+        if (compareTypes(expr_1Type, expr_2Type) == false && compareTypes(expr_2Type, expr_1Type) == false)
         {
             std::cout << "Error: different types in the if condition: " << std::endl
-                       << getNodeID(equal->expr_1) << std::endl
-                       << getNodeID(equal->expr_2) << std::endl
+                      << getNodeID(equal->expr_1) << std::endl
+                      << getNodeID(equal->expr_2) << std::endl
                       << "On the line: " << equal->line_number << std::endl;
             exit(1);
         }
+
+        this->setLastReturn(new TypeBool());
     }
 
     void VisitTypeCheck::visitNotEqual(NotEqual *not_equal)
@@ -943,14 +1238,16 @@ namespace Stella
             not_equal->expr_2->accept(this);
         Type *expr_2Type = this->getLastReturn();
 
-        if (compareTypes(expr_1Type, expr_2Type) == false)
+        if (compareTypes(expr_1Type, expr_2Type) == false && compareTypes(expr_2Type, expr_1Type) == false)
         {
             std::cout << "Error: different types in the if condition: " << std::endl
-                       << getNodeID(not_equal->expr_1) << std::endl
-                       << getNodeID(not_equal->expr_2) << std::endl
+                      << getNodeID(not_equal->expr_1) << std::endl
+                      << getNodeID(not_equal->expr_2) << std::endl
                       << "On the line: " << not_equal->line_number << std::endl;
             exit(1);
         }
+
+        this->setLastReturn(new TypeBool());
     }
 
     void VisitTypeCheck::visitTypeAsc(TypeAsc *type_asc)
@@ -989,12 +1286,8 @@ namespace Stella
         Type *expr_Type = this->getLastReturn();
 
         // Check if the return expression is correctly handled
-        if (expr_Type == nullptr)
-        {
-            std::cout << "Error: else statement is not specified" << std::endl
-                      << "On the line: " << abstraction->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_Type, abstraction->expr_->line_number, abstraction->expr_->char_number);
+
         TypeFun *FunctionType = CombineFun(listparamdeclCopy, expr_Type);
 
         // Scope realisation
@@ -1017,7 +1310,6 @@ namespace Stella
     void VisitTypeCheck::visitMatch(Match *match)
     {
         /* Code For Match Goes Here */
-
         if (match->expr_)
             match->expr_->accept(this);
         Type *expr_Type = this->getLastReturn();
@@ -1028,12 +1320,7 @@ namespace Stella
         std::vector<Type *> casesList = this->getReturnTypesList();
         this->removeInType();
 
-        if (expr_Type == nullptr)
-        {
-            std::cout << "Error: no match expression in the match" << std::endl
-                      << "On the line: " << match->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_Type, match->expr_->line_number, match->expr_->char_number);
 
         if (casesList.size() == 0)
         {
@@ -1044,7 +1331,7 @@ namespace Stella
 
         for (int i = 1; i < casesList.size(); ++i)
         {
-            if (compareTypes(casesList[i - 1], casesList[i]) == false)
+            if (compareTypes(casesList[i - 1], casesList[i]) == false && compareTypes(casesList[i], casesList[i - 1]) == false)
             {
                 std::cout << "Error: different match types in match expression" << std::endl
                           << "On the line: " << match->line_number << std::endl;
@@ -1131,12 +1418,8 @@ namespace Stella
         Type *expr_Type = this->getLastReturn();
 
         // Check if the function name is correctly handled
-        if (expr_Type == nullptr)
-        {
-            std::cout << "Error: function name is not specified" << std::endl
-                      << "On the line: " << application->expr_->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_Type, application->expr_->line_number, application->expr_->char_number);
+
         // Check if user is not trying to assign parameters to non-function variable
         if (ifTypeFun(expr_Type) == false)
         {
@@ -1152,7 +1435,6 @@ namespace Stella
         if (application->listexpr_)
             application->listexpr_->accept(this);
         std::vector<Type *> listexpr_Copy = this->getReturnTypesList();
-
 
         std::vector<Type *> Arguments;
         for (ListType::iterator i = expr_TypeFun->listtype_->begin(); i != expr_TypeFun->listtype_->end(); ++i)
@@ -1177,8 +1459,8 @@ namespace Stella
 
         // Comparing types of arguments and passing parameters
         for (int i = 0; i < Arguments.size() && i < listexpr_Copy.size(); ++i)
-        {  
-            if (compareTypes(Arguments[i], listexpr_Copy[i]) == false)
+        {
+            if (compareTypes(listexpr_Copy[i], Arguments[i]) == false)
             {
                 std::cout << "Error: incorrect parameters in the function call" << std::endl;
                 std::cout << "Function name: " << getNodeID(application->expr_) << std::endl
@@ -1197,7 +1479,36 @@ namespace Stella
 
         if (dot_record->expr_)
             dot_record->expr_->accept(this);
+        TypeRecord *returnRecord = (TypeRecord *)this->getLastReturn();
+
+        if (returnRecord == nullptr || returnRecord->listrecordfieldtype_ == nullptr)
+        {
+            std::cout << "Error: no tuple in dot tuple call: " << std::endl
+                      << "On the line" << dot_record->expr_->line_number << std::endl;
+            exit(1);
+        }
+
         visitStellaIdent(dot_record->stellaident_);
+
+        Type *constructType = nullptr;
+        for (ListRecordFieldType::iterator i = returnRecord->listrecordfieldtype_->begin(); i != returnRecord->listrecordfieldtype_->end(); ++i)
+        {
+            ARecordFieldType *ARFT = (ARecordFieldType *)(*i);
+            if (ARFT->stellaident_ == dot_record->stellaident_)
+            {
+                constructType = ARFT->type_;
+            }
+        }
+
+        if (constructType == nullptr)
+        {
+            std::cout << "Error: incorrect record field name" << std::endl
+                      << "On the line: " << dot_record->line_number << std::endl
+                      << "Character number: " << dot_record->char_number << std::endl;
+            exit(1);
+        }
+
+        this->setLastReturn(constructType);
     }
 
     void VisitTypeCheck::visitDotTuple(DotTuple *dot_tuple)
@@ -1207,11 +1518,12 @@ namespace Stella
         if (dot_tuple->expr_)
             dot_tuple->expr_->accept(this);
 
-        TypeTuple* returnTuple = (TypeTuple*)this->getLastReturn();
+        TypeTuple *returnTuple = (TypeTuple *)this->getLastReturn();
 
-        if (returnTuple == nullptr || returnTuple->listtype_ == nullptr){
+        if (returnTuple == nullptr || returnTuple->listtype_ == nullptr)
+        {
             std::cout << "Error: no tuple in dot tuple call: " << std::endl
-                    << "On the line" << dot_tuple->expr_->line_number << std::endl;
+                      << "On the line" << dot_tuple->expr_->line_number << std::endl;
             exit(1);
         }
         std::vector<Type *> tupleList;
@@ -1245,6 +1557,21 @@ namespace Stella
 
         if (record->listbinding_)
             record->listbinding_->accept(this);
+        // Дописать сборщик типов
+        std::vector<Type *> listbindingCopy = this->getReturnTypesList();
+
+        ListRecordFieldType *returnTypeList = new ListRecordFieldType();
+
+        int j = listbindingCopy.size() - 1;
+        for (ListBinding::iterator i = record->listbinding_->end() - 1; i != record->listbinding_->begin() - 1; --i, --j)
+        {
+            ABinding *AB = (ABinding *)(*i);
+            returnTypeList = consListRecordFieldType(new ARecordFieldType(AB->stellaident_, listbindingCopy[j]), returnTypeList);
+        }
+
+        TypeRecord *returnType = new TypeRecord(returnTypeList);
+
+        this->setLastReturn(returnType);
     }
 
     void VisitTypeCheck::visitConsList(ConsList *cons_list)
@@ -1288,8 +1615,8 @@ namespace Stella
         if (inl->expr_)
             inl->expr_->accept(this);
         Type *expt_Type = this->getLastReturn();
-        
-        TypeSum* output = new TypeSum(expt_Type, nullptr);
+
+        TypeSum *output = new TypeSum(expt_Type, new TypeBottom());
 
         this->setLastReturn(output);
     }
@@ -1301,7 +1628,7 @@ namespace Stella
             inr->expr_->accept(this);
         Type *expt_Type = this->getLastReturn();
 
-        TypeSum* output = new TypeSum(nullptr, expt_Type);
+        TypeSum *output = new TypeSum(new TypeBottom(), expt_Type);
 
         this->setLastReturn(output);
     }
@@ -1315,12 +1642,7 @@ namespace Stella
         Type *expr_Type = this->getLastReturn();
 
         // Check if succ parameter is correctly handled
-        if (expr_Type == nullptr)
-        {
-            std::cout << "Error: no expression inside the succ function" << std::endl
-                      << "On the line: " << succ->expr_->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_Type, succ->expr_->line_number, succ->expr_->char_number);
 
         // Check if succ parameter is correctly typed
         if (compareTypes(expr_Type, new TypeNat()) == false)
@@ -1382,24 +1704,9 @@ namespace Stella
         Type *expr_3Type = this->getLastReturn();
 
         // Check if parameters is handled correctly
-        if (expr_1Type == nullptr)
-        {
-            std::cout << "Error: no first paramenet inside the Nat::rec function" << std::endl
-                      << "On the line: " << nat_rec->expr_1->line_number << std::endl;
-            exit(1);
-        }
-        if (expr_2Type == nullptr)
-        {
-            std::cout << "Error: no second paramenet inside the Nat::rec function" << std::endl
-                      << "On the line: " << nat_rec->expr_2->line_number << std::endl;
-            exit(1);
-        }
-        if (expr_3Type == nullptr)
-        {
-            std::cout << "Error: no third paramenet inside the Nat::rec function" << std::endl
-                      << "On the line: " << nat_rec->expr_3->line_number << std::endl;
-            exit(1);
-        }
+        nullptrCheck(expr_1Type, nat_rec->expr_1->line_number, nat_rec->expr_1->char_number);
+        nullptrCheck(expr_2Type, nat_rec->expr_2->line_number, nat_rec->expr_2->char_number);
+        nullptrCheck(expr_3Type, nat_rec->expr_3->line_number, nat_rec->expr_3->char_number);
 
         // Check the first parameter if correctly typed
         if (compareTypes(expr_1Type, new TypeNat()) == false)
@@ -1472,7 +1779,8 @@ namespace Stella
                       << "On the line: " << nat_rec->expr_3->line_number << std::endl;
             exit(1);
         }
-        if (compareTypes(expr_3RetFuncParameters[0], expr_3ReturnType->type_) == false)
+        if (compareTypes(expr_3RetFuncParameters[0], expr_3ReturnType->type_) == false &&
+            compareTypes(expr_3ReturnType->type_, expr_3RetFuncParameters[0]) == false)
         {
             std::cout << "Error: different types in the third argument of the Nat::rec function: " << std::endl
                       << "Expected: fn(Nat) -> (fn(**T**) -> **T**)" << std::endl
@@ -1483,7 +1791,8 @@ namespace Stella
         }
 
         // Check The third parameter return type and the second parameter
-        if (compareTypes(expr_3ReturnType->type_, expr_2Type) == false)
+        if (compareTypes(expr_3ReturnType->type_, expr_2Type) == false &&
+            compareTypes(expr_2Type, expr_3ReturnType->type_) == false)
         {
             std::cout << "Error: different types of statements in the third arg and the second one: " << std::endl
                       << "Expected: Nat::rec(Nat, T, fn(Nat) -> (fn(T) -> T))" << std::endl
@@ -1603,6 +1912,10 @@ namespace Stella
         visitStellaIdent(a_record_field_type->stellaident_);
         if (a_record_field_type->type_)
             a_record_field_type->type_->accept(this);
+        Type *field_Type = this->getLastReturn();
+
+        // Check if type for RecordFieldType is correctly handled
+        nullptrCheck(field_Type, a_record_field_type->type_->line_number, a_record_field_type->type_->char_number);
     }
 
     void VisitTypeCheck::visitATyping(ATyping *a_typing)
@@ -1694,7 +2007,7 @@ namespace Stella
     {
         // Collecting types
         std::vector<Type *> TypeCollector;
-        Type* input = getInType();
+        Type *input = getInType();
         for (ListMatchCase::iterator i = list_match_case->begin(); i != list_match_case->end(); ++i)
         {
             this->setInType(input);
@@ -1708,26 +2021,50 @@ namespace Stella
 
     void VisitTypeCheck::visitListPattern(ListPattern *list_pattern)
     {
-        for (ListPattern::iterator i = list_pattern->begin(); i != list_pattern->end(); ++i)
+        TypeTuple *input = (TypeTuple *)this->getInType();
+
+        ListType::iterator j = input->listtype_->begin();
+        for (ListPattern::iterator i = list_pattern->begin(); i != list_pattern->end() && j != input->listtype_->end(); ++i, ++j)
         {
+            this->setInType((*j));
             (*i)->accept(this);
         }
     }
 
     void VisitTypeCheck::visitListLabelledPattern(ListLabelledPattern *list_labelled_pattern)
     {
-        for (ListLabelledPattern::iterator i = list_labelled_pattern->begin(); i != list_labelled_pattern->end(); ++i)
+        // Collecting types
+        TypeRecord *input = (TypeRecord *)this->getInType();
+
+        ListRecordFieldType::iterator j = input->listrecordfieldtype_->begin();
+        for (ListLabelledPattern::iterator i = list_labelled_pattern->begin();
+             i != list_labelled_pattern->end() && j != input->listrecordfieldtype_->end(); ++i, ++j)
         {
+            ARecordFieldType *ARFT = (ARecordFieldType *)(*j);
+            ALabelledPattern *ALP = (ALabelledPattern *)(*i);
+            if (ARFT->stellaident_ != ALP->stellaident_)
+            {
+                std::cout << "Error: incorrect name in the pattern record" << std::endl
+                          << "Expected: " << ARFT->stellaident_ << std::endl
+                          << "But got: " << ALP->stellaident_ << std::endl;
+            }
+
+            this->setInType(ARFT->type_);
             (*i)->accept(this);
         }
     }
 
     void VisitTypeCheck::visitListBinding(ListBinding *list_binding)
     {
+        // Collecting types
+        std::vector<Type *> TypeCollector;
         for (ListBinding::iterator i = list_binding->begin(); i != list_binding->end(); ++i)
         {
             (*i)->accept(this);
+            Type *temp = this->getLastReturn();
+            TypeCollector.push_back(temp);
         }
+        this->setReturnTypesList(TypeCollector);
     }
 
     void VisitTypeCheck::visitListExpr(ListExpr *list_expr)
@@ -1735,7 +2072,7 @@ namespace Stella
         // Collecting expression types
         std::vector<Type *> ExprCollector;
         for (ListExpr::iterator i = list_expr->begin(); i != list_expr->end(); ++i)
-        {   
+        {
             (*i)->accept(this);
             Type *temp = this->getLastReturn();
             ExprCollector.push_back(temp);
