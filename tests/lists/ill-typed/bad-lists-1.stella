@@ -1,5 +1,5 @@
 language core;
-extend with #lists;
+extend with #lists, #general-recursion;
 
 fn length(list : [Nat]) -> Nat {
   return if List::isempty(list)
@@ -8,5 +8,5 @@ fn length(list : [Nat]) -> Nat {
 }
 
 fn main(n : Nat) -> Nat {
-  return length([n, n, n, n, n])
+  return length(cons(n, [n, n, n, 0, succ(n), false, n]))
 }

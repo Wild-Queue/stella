@@ -86,6 +86,7 @@ namespace Stella
             {
                 ARecordFieldType *AFTi = (ARecordFieldType *)(*i);
                 bool entered = false;
+                bool found = false;
 
                 for (ListRecordFieldType::iterator j = subTypeRecord->listrecordfieldtype_->begin(); j != subTypeRecord->listrecordfieldtype_->end(); ++j)
                 {
@@ -93,13 +94,13 @@ namespace Stella
                     // i - parameter of superType
                     // j - parameter of subType
 
-                    if (AFTj->stellaident_ == AFTi->stellaident_ && compareTypes(AFTj->type_, AFTi->type_) == false)
-                        ifSubType = false;
+                    if (AFTj->stellaident_ == AFTi->stellaident_ && compareTypes(AFTj->type_, AFTi->type_))
+                        found = true;
 
                     if (AFTj->stellaident_ == AFTi->stellaident_)
                         entered = true;
                 }
-                if (entered == false)
+                if (entered == false || found == false)
                     ifSubType = false;
             }
 
@@ -165,8 +166,6 @@ namespace Stella
         }
         if (subTypeStr.size() > 11 && subTypeStr.substr(0, 11) == "(TypeRecord")
         {
-            std::cout << "TypeRecord :\n SubType:" << subTypeStr << "\n SuperType:" << superTypeStr << std::endl;
-            std::cout << typerecordCompare(subType, superType) << std::endl;
             return typerecordCompare(subType, superType);
         }
 
@@ -1307,6 +1306,24 @@ namespace Stella
             variant->exprdata_->accept(this);
     }
 
+    bool checkTopLevelMatch(ListMatchCase* ListMatchCase){
+        auto showner = new ShowAbsyn();
+        int inr = false;
+        int inl = false;
+        for (ListMatchCase::iterator i = ListMatchCase->begin(); i != ListMatchCase->end(); ++i)
+        {
+            AMatchCase * AMC = (AMatchCase *)*i;
+            std::string AMCStr = showner->show(AMC->pattern_);
+            if (AMCStr.size() > 11 && AMCStr.substr(0, 11) == "(PatternInr"){
+                inr = true;
+            }
+            if (AMCStr.size() > 11 && AMCStr.substr(0, 11) == "(PatternInl"){
+                inl = true;
+            }
+        }
+        return (inr != inl);
+    }
+
     void VisitTypeCheck::visitMatch(Match *match)
     {
         /* Code For Match Goes Here */
@@ -1322,9 +1339,9 @@ namespace Stella
 
         nullptrCheck(expr_Type, match->expr_->line_number, match->expr_->char_number);
 
-        if (casesList.size() == 0)
+        if (casesList.size() == 0 || checkTopLevelMatch(match->listmatchcase_))
         {
-            std::cout << "Error: no cases in the match" << std::endl
+            std::cout << "Error: not enough cases in the match" << std::endl
                       << "On the line: " << match->line_number << std::endl;
             exit(1);
         }
@@ -1533,6 +1550,14 @@ namespace Stella
         }
 
         visitInteger(dot_tuple->integer_);
+
+        if (dot_tuple->integer_ > tupleList.size())
+        {
+            std::cout << "Error: unexpected access to component number " << dot_tuple->integer_ << std::endl
+                      << "On the line: " << dot_tuple->line_number << std::endl
+                      << "Character number: " << dot_tuple->char_number << std::endl;
+            exit(1);
+        }
 
         this->setLastReturn(tupleList[dot_tuple->integer_ - 1]);
     }
